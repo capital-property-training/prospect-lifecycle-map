@@ -76,12 +76,15 @@
     .brand{gap:10px}
     .logo{height:26px}
     .wrap{display:block;height:auto}
-    .canvas{padding:14px 12px 40px;overflow:visible}
-    #mapHolder{max-width:none}
+    .canvas{padding:10px;overflow:auto;-webkit-overflow-scrolling:touch}
+    #mapHolder{max-width:none;width:max-content;margin:0}
+    svg#map{width:820px;max-width:none;height:auto}
+    .mobtip{display:block;text-align:center;font-size:11px;color:var(--mut);padding:6px 0 2px}
     .drawer{position:fixed;top:0;right:0;height:100vh;width:0;z-index:50;border-left:none}
     .drawer.open{width:100%}
     .drawer .inner{width:100vw}
   }
+  .mobtip{display:none}
 </style>
 </head>
 <body>
@@ -98,7 +101,7 @@
   </div>
 </header>
 <div class="wrap">
-  <div class="canvas"><div id="mapHolder"></div></div>
+  <div class="canvas"><div class="mobtip">swipe to move · pinch to zoom · tap a box for its SOP</div><div id="mapHolder"></div></div>
   <div class="drawer" id="drawer"><div class="inner" id="drawerInner"></div></div>
 </div>
 <script>
@@ -254,7 +257,7 @@ function buildMobile(){
 
 /* ============ responsive chooser ============ */
 function render(){
-  if(window.innerWidth<760) buildMobile(); else buildDesktop();
+  buildDesktop();
   const holder=document.getElementById("mapHolder");
   holder.onclick=e=>{const g=e.target.closest("[data-id]"); if(g) openDrawer(g.dataset.id);};
 }
