@@ -44,6 +44,44 @@
   .placeholder{border:1px dashed var(--line);border-radius:8px;padding:16px;text-align:center;color:var(--mut);font-size:13px}
   .close{position:absolute;top:14px;right:16px}
   .hint{font-size:11px;color:var(--mut);margin-left:10px}
+
+  /* ---- mobile card stack ---- */
+  .mobile{max-width:520px;margin:0 auto;padding:4px 2px}
+  .mcard{border-radius:12px;padding:14px 16px;margin:0 auto;cursor:pointer;border:1.8px solid var(--new);background:#14172e}
+  .mcard:active{filter:brightness(1.2)}
+  .mstage{background:linear-gradient(135deg,var(--mid),var(--new));border-color:var(--new)}
+  .mwin{background:var(--greenBg);border-color:var(--green)}
+  .mout{background:#14172e}
+  .mtitle{font-size:16px;font-weight:700;color:#fff}
+  .mwin .mtitle{color:#9ff0c0}
+  .mout .mtitle,.mwin .mtitle{color:#cfd6ff}
+  .mwin .mtitle{color:#9ff0c0}
+  .msub{font-weight:400;font-size:12px;color:#c7d2fe;margin-left:4px}
+  .mgoal{font-size:13px;color:#c9cede;margin-top:6px;line-height:1.4}
+  .mempty{color:var(--mut);font-style:italic}
+  .mtap{font-size:12px;font-weight:700;color:#7d8bff;margin-top:8px;text-align:right}
+  .mwin .mtap{color:#5fd99a}
+  .mbranch{display:flex;flex-direction:column;gap:8px;margin:8px auto 8px;padding-left:18px;border-left:2px dashed var(--line)}
+  .mbranch .mcard{padding:11px 14px}
+  .mbranch .mtitle{font-size:14px}
+  .marrow{text-align:center;color:var(--green);font-weight:700;font-size:12px;margin:10px 0;letter-spacing:.3px}
+  .marrow span{font-size:11px}
+  .mcard{margin-bottom:0}
+  .mobile>.mcard{margin-bottom:0}
+
+  @media (max-width:760px){
+    body{height:auto;min-height:100vh;overflow:auto}
+    header{flex-wrap:wrap;gap:8px;padding:12px 14px}
+    header h1{font-size:14px}
+    .brand{gap:10px}
+    .logo{height:26px}
+    .wrap{display:block;height:auto}
+    .canvas{padding:14px 12px 40px;overflow:visible}
+    #mapHolder{max-width:none}
+    .drawer{position:fixed;top:0;right:0;height:100vh;width:0;z-index:50;border-left:none}
+    .drawer.open{width:100%}
+    .drawer .inner{width:100vw}
+  }
 </style>
 </head>
 <body>
@@ -122,7 +160,7 @@ function nodeSVG(id,cx,y,w,h){
   return `<g class="nodeg" data-id="${id}">${inner}</g>`;
 }
 
-function buildMap(){
+function buildDesktop(){
   const P=[]; const CX=560;
   // arrows first (under nodes)
   function path(d,col,mk){P.push(`<path d="${d}" stroke="${col}" stroke-width="2" fill="none"${mk?` marker-end="url(#${mk})"`:''}/>`);}
@@ -178,10 +216,49 @@ function buildMap(){
    <linearGradient id="s" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${MID}"/><stop offset="1" stop-color="${NEW}"/></linearGradient>
   </defs>${P.join("")}</svg>`;
   document.getElementById("mapHolder").innerHTML=svg;
-  document.getElementById("map").addEventListener("click",e=>{
-    const g=e.target.closest(".nodeg"); if(g) openDrawer(g.dataset.id);
-  });
 }
+
+/* ============ mobile: vertical stack of tappable cards ============ */
+const FLOW=[
+  {stage:"optin",        outcomes:["no_purchase"],                       next:"PURCHASED"},
+  {stage:"purchased",    outcomes:["ab_yy","ab_ny","ab_yn","ab_nn"],     next:"BOOKED \u2192 continues"},
+  {stage:"call_booked",  outcomes:["no_show"],                           next:"SHOWS UP"},
+  {stage:"call_happens", outcomes:["closed","dc_fu_booked","dc_fu_not"], next:"CLOSED \u2192 onboard"},
+  {stage:"onboarding",   outcomes:[],                                    next:null}
+];
+function card(id,role){
+  const n=NODES[id];
+  const lab=Array.isArray(n.label)?n.label.join(" "):n.label;
+  const cls = n.kind==="stage"?"mstage":(n.kind==="win"?"mwin":"mout");
+  const hasSop = n.sop && (n.sop.goal || (n.sop.channels||[]).length || (n.sop.sequence||[]).length);
+  return `<div class="mcard ${cls}" data-id="${id}">
+    <div class="mtitle">${esc(lab)}${n.sub?` <span class="msub">${esc(n.sub)}</span>`:''}</div>
+    <div class="mgoal">${hasSop?esc(n.sop.goal||'Tap to open SOP'):'<span class="mempty">No SOP yet \u2014 tap to add</span>'}</div>
+    <div class="mtap">SOP \u203a</div>
+  </div>`;
+}
+function buildMobile(){
+  let h='<div class="mobile">';
+  FLOW.forEach((row,i)=>{
+    h+=card(row.stage);
+    if(row.outcomes.length){
+      h+='<div class="mbranch">';
+      row.outcomes.forEach(o=>h+=card(o));
+      h+='</div>';
+    }
+    if(row.next) h+=`<div class="marrow">↓ <span>${row.next}</span></div>`;
+  });
+  h+='</div>';
+  document.getElementById("mapHolder").innerHTML=h;
+}
+
+/* ============ responsive chooser ============ */
+function render(){
+  if(window.innerWidth<760) buildMobile(); else buildDesktop();
+  const holder=document.getElementById("mapHolder");
+  holder.onclick=e=>{const g=e.target.closest("[data-id]"); if(g) openDrawer(g.dataset.id);};
+}
+let _rt; window.addEventListener("resize",()=>{clearTimeout(_rt);_rt=setTimeout(render,200);});
 
 /* ============ drawer = the SOP page for a node ============ */
 let editMode=false, openId=null;
@@ -233,7 +310,7 @@ function saveDrawer(){
   n.sub=document.getElementById("f_sub").value;
   n.sop.goal=document.getElementById("f_goal").value;
   n.sop.channels=document.getElementById("f_ch").value.split(",").map(x=>x.trim()).filter(Boolean);
-  buildMap(); openDrawer(openId);
+  render(); openDrawer(openId);
 }
 document.getElementById("editBtn").onclick=function(){
   editMode=!editMode; this.textContent="✏️ Edit mode: "+(editMode?"ON":"OFF");
@@ -250,10 +327,10 @@ document.getElementById("exportBtn").onclick=function(e){
 document.getElementById("importBtn").onclick=()=>document.getElementById("fileIn").click();
 document.getElementById("fileIn").onchange=function(e){
   const f=e.target.files[0]; if(!f)return; const rd=new FileReader();
-  rd.onload=()=>{try{let t=rd.result; if(f.name.endsWith(".html")){const m=t.match(/let NODES = (\{[\s\S]*?\n\});/);if(m)NODES=JSON.parse(m[1]);}else NODES=JSON.parse(t); buildMap();closeDrawer();}catch(err){alert("Parse error: "+err.message);}};
+  rd.onload=()=>{try{let t=rd.result; if(f.name.endsWith(".html")){const m=t.match(/let NODES = (\{[\s\S]*?\n\});/);if(m)NODES=JSON.parse(m[1]);}else NODES=JSON.parse(t); render();closeDrawer();}catch(err){alert("Parse error: "+err.message);}};
   rd.readAsText(f);
 };
-buildMap();
+render();
 </script>
 </body>
 </html>
