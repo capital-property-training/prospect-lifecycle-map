@@ -135,8 +135,12 @@ let NODES = {
                  sop:{goal:"Get them to watch the course and book a call. If watching fails, at least get them booked in for a call.", channels:["WhatsApp"], automation:[],actions:[]}},
   eng_noaccess: {label:["Didn't get","access"], sub:"", kind:"out",
                  sop:{goal:"Get them access, get them to watch the course, and get them booked in for a call. If watching fails, at least get them access and booked in for a call.", channels:["WhatsApp"], automation:[],actions:[]}},
-  nb_watched:   {label:"Didn't book", sub:"", kind:"out",
-                 sop:{goal:"Get them to book a call.", channels:[], automation:[],actions:[]}},
+  nb_watched:   {label:"Didn't book", sub:"", ctx:"Got access \u00b7 watched", kind:"out",
+                 sop:{goal:"Get them to book a call.",
+                      timing:"Triggers 24 hours after Lesson 1 is marked complete \u2014 only if no call has been booked",
+                      channels:["Email","SMS","WhatsApp","Phone"],
+                      automation:["Automated email sent to prospect (booking link)","Automated SMS sent to prospect (booking link)"],
+                      actions:["WhatsApp the prospect referencing the course they watched","If no reply \u2192 call them"]}},
   nb_nowatch:   {label:"Didn't book", sub:"", kind:"out",
                  sop:{goal:"Get them to watch the course and book a call. If watching fails, at least get them booked in for a call.", channels:[], automation:[],actions:[]}},
   nb_noaccess:  {label:"Didn't book", sub:"", kind:"out",
@@ -312,7 +316,7 @@ function openDrawer(id){
     h+=`<div style="margin-top:18px"><button class="primary" onclick="saveDrawer()">Save</button></div>`;
   } else {
     h+=`<h2>${esc(labelText(n))}</h2>`;
-    if(n.sub) h+=`<div class="muted" style="margin-bottom:14px">${esc(n.sub)}</div>`;
+    {const subline=n.ctx||n.sub; if(subline) h+=`<div class="muted" style="margin-bottom:14px">${esc(subline)}</div>`;}
     if(sop.timing) h+=`<div class="timing">⏱ ${esc(sop.timing)}</div>`;
     h+=`<div class="field"><label>SOP goal</label><div class="muted">${esc(sop.goal)||'—'}</div></div>`;
     h+=`<div class="field"><label>Channels</label><div class="muted">${(sop.channels||[]).join(' · ')||'—'}</div></div>`;
