@@ -14,7 +14,9 @@
   .logo{height:34px;width:auto;display:block}
   header h1{font-size:16px;margin:0;font-weight:800;letter-spacing:.3px;text-transform:uppercase}
   header .sub{font-size:12px;color:var(--mut);margin-top:1px}
-  header .actions{display:flex;gap:8px}
+  header .actions{display:flex;gap:8px;align-items:center}
+  header .actions a.tplink{display:inline-flex;align-items:center;gap:5px;background:#191970;color:#fff;border:1px solid #2C3E8F;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:600;text-decoration:none;cursor:pointer}
+  header .actions a.tplink:hover{background:#2C3E8F}
   button{font:inherit;border:1px solid var(--line);background:var(--panel2);color:var(--txt);padding:7px 12px;border-radius:8px;cursor:pointer;font-size:13px}
   button:hover{border-color:var(--new)}
   button.primary{background:var(--new);border-color:var(--new)}
@@ -102,6 +104,7 @@
     <div><h1>Prospect Lifecycle Map</h1><div class="sub">Opt-in to onboarding — click any box for its SOP</div></div>
   </div>
   <div class="actions">
+    <a href="touchpoints.html" class="tplink">📊 Touchpoints</a>
     <button class="editToggle" id="editBtn">✏️ Edit mode: OFF</button>
     <button id="exportBtn" class="primary">⬇ Export</button>
     <button id="importBtn">⬆ Import</button>

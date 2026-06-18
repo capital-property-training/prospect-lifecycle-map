@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Prospect Touchpoints — Contact Load</title>
+<style>
+  :root{--bg:#0f1117;--card:#14172e;--ind:#2C3E8F;--mut:#9aa0ad;--txt:#e7e9ee;}
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--txt);font-family:Segoe UI,Roboto,Helvetica,Arial,sans-serif;padding:26px 18px 60px;}
+  .wrap{max-width:920px;margin:0 auto;}
+  a.back{color:#9fb4ff;text-decoration:none;font-size:13px;}
+  a.back:hover{text-decoration:underline;}
+  h1{font-size:21px;margin:14px 0 4px;}
+  .sub{color:var(--mut);font-size:13px;margin:0 0 18px;line-height:1.5;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th,td{padding:8px 10px;text-align:center;border-bottom:1px solid #20243a;}
+  th{position:sticky;top:0;background:#191c33;color:#c7d2fe;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.4px;}
+  td.jn{text-align:left;color:#dfe3ee;}
+  td.num{color:var(--mut);width:34px;}
+  tr.grp td{text-align:left;background:#101327;color:#8ea0ff;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.6px;padding:7px 10px;}
+  td.tot{font-weight:800;border-radius:6px;}
+  .b-grn{background:#10241a;color:#9ff0c0;}
+  .b-amb{background:#2a210a;color:#ffd27a;}
+  .b-org{background:#3a1e0a;color:#ffb27a;}
+  .b-red{background:#3a0f0f;color:#ff9a9a;}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin:14px 0 0;font-size:12px;color:var(--mut);align-items:center;}
+  .legend span{display:inline-flex;align-items:center;gap:6px;}
+  .chip{width:16px;height:12px;border-radius:3px;display:inline-block;}
+  .notes{margin-top:20px;font-size:12px;color:var(--mut);line-height:1.6;border-top:1px solid #20243a;padding-top:14px;}
+  .notes b{color:#c7d2fe;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./">← Prospect lifecycle map</a>
+  <h1>Prospect Touchpoints — Contact Load</h1>
+  <p class="sub">How many times a prospect is contacted on each of the 16 journeys, split by channel. Higher totals are redder — scan the Total column to spot anyone getting hit too often.</p>
+  <table>
+    <thead>
+      <tr><th>#</th><th>Journey</th><th>Email</th><th>SMS</th><th>WhatsApp</th><th>Calls</th><th>Total</th></tr>
+    </thead>
+    <tbody>
+<tr class="grp"><td colspan="7">No purchase</td></tr>
+<tr><td class="num">1</td><td class="jn">No purchase</td><td>2</td><td>1</td><td>2</td><td>2</td><td class="tot b-grn">7</td></tr>
+<tr class="grp"><td colspan="7">Got access · watched</td></tr>
+<tr><td class="num">2</td><td class="jn">Watched · didn't book</td><td>3</td><td>3</td><td>3</td><td>2</td><td class="tot b-amb">11</td></tr>
+<tr><td class="num">3</td><td class="jn">Watched · no show</td><td>4</td><td>4</td><td>4</td><td>2</td><td class="tot b-amb">14</td></tr>
+<tr><td class="num">4</td><td class="jn">Watched · closed → onboarding</td><td>3</td><td>3</td><td>3</td><td>2</td><td class="tot b-amb">11</td></tr>
+<tr><td class="num">5</td><td class="jn">Watched · didn't close (follow-up booked)</td><td>5</td><td>4</td><td>4</td><td>2</td><td class="tot b-org">15</td></tr>
+<tr><td class="num">6</td><td class="jn">Watched · didn't close (no follow-up)</td><td>5</td><td>4</td><td>4</td><td>2</td><td class="tot b-org">15</td></tr>
+<tr class="grp"><td colspan="7">Got access · didn't watch</td></tr>
+<tr><td class="num">7</td><td class="jn">Didn't watch · didn't book</td><td>4</td><td>4</td><td>4</td><td>2</td><td class="tot b-amb">14</td></tr>
+<tr><td class="num">8</td><td class="jn">Didn't watch · no show</td><td>5</td><td>5</td><td>5</td><td>2</td><td class="tot b-org">17</td></tr>
+<tr><td class="num">9</td><td class="jn">Didn't watch · closed → onboarding</td><td>4</td><td>4</td><td>4</td><td>2</td><td class="tot b-amb">14</td></tr>
+<tr><td class="num">10</td><td class="jn">Didn't watch · didn't close (follow-up booked)</td><td>6</td><td>5</td><td>5</td><td>2</td><td class="tot b-red">18</td></tr>
+<tr><td class="num">11</td><td class="jn">Didn't watch · didn't close (no follow-up)</td><td>6</td><td>5</td><td>5</td><td>2</td><td class="tot b-red">18</td></tr>
+<tr class="grp"><td colspan="7">Didn't get access</td></tr>
+<tr><td class="num">12</td><td class="jn">No access · didn't book</td><td>4</td><td>4</td><td>4</td><td>2</td><td class="tot b-amb">14</td></tr>
+<tr><td class="num">13</td><td class="jn">No access · no show</td><td>5</td><td>5</td><td>5</td><td>3</td><td class="tot b-red">18</td></tr>
+<tr><td class="num">14</td><td class="jn">No access · closed → onboarding</td><td>4</td><td>4</td><td>4</td><td>3</td><td class="tot b-org">15</td></tr>
+<tr><td class="num">15</td><td class="jn">No access · didn't close (follow-up booked)</td><td>6</td><td>5</td><td>5</td><td>3</td><td class="tot b-red">19</td></tr>
+<tr><td class="num">16</td><td class="jn">No access · didn't close (no follow-up)</td><td>6</td><td>5</td><td>5</td><td>3</td><td class="tot b-red">19</td></tr>
+    </tbody>
+  </table>
+  <div class="legend">
+    <span><i class="chip b-grn"></i>≤10</span>
+    <span><i class="chip b-amb"></i>11–14</span>
+    <span><i class="chip b-org"></i>15–17</span>
+    <span><i class="chip b-red"></i>18+</span>
+  </div>
+  <div class="notes">
+    <b>What's counted:</b> every contact that reaches the prospect — automated emails/SMS plus manual WhatsApp and calls. "Calls" includes phone chases and the Zoom sales call.<br>
+    <b>Not counted:</b> Slack team alerts, the email notification to you, retargeting ads, and the Skool system invite.<br>
+    <b>Conditional steps:</b> some SOP calls/WhatsApps only fire if an earlier contact gets no reply — these are counted at their maximum, so real-world totals are often lower.<br>
+    <b>Not yet built:</b> Closed and Onboarding have no contacts assigned yet — totals on those journeys (closed paths) will rise once built.
+  </div>
+</div>
+</body>
+</html>
