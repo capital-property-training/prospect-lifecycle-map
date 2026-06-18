@@ -182,7 +182,10 @@ let NODES = {
                       automation:["Follow-up call confirmation email (date/time + Zoom link)","SMS confirmation","Slack notification to team \u2014 didn't close + follow-up booked"],
                       actions:["Immediately after the call: log why they didn't close and the exact objection","Work out how to overcome the objection; prepare the angle + material for the follow-up call","Send a resource that pre-handles the objection (case study / proof)","WhatsApp a personal touch before the follow-up to keep them warm and confirm they'll show"]}},
   dc_fu_not:    {label:["Didn't close","follow-up NOT booked"], sub:"", kind:"out",
-                 sop:{goal:"Identify the objections, overcome them, and get them booked back in for a call.", channels:["Email","SMS","WhatsApp"], automation:[],actions:[]}},
+                 sop:{goal:"Find out exactly what the objection was, work out how to overcome it, and get them booked back in for a call.",
+                      channels:["Email","SMS","WhatsApp"],
+                      automation:["Automated re-engagement email sent to prospect (rebooking link)","Automated SMS sent to prospect (rebooking link)","Slack notification to team \u2014 didn't close + follow-up NOT booked"],
+                      actions:["Immediately after the call: log why they didn't close and the exact objection","Work out how to overcome the objection; prepare the angle + material","Send a resource that pre-handles the objection (case study / proof)","WhatsApp the prospect to re-open the conversation and get the call rebooked"]}},
   onboarding:   {label:"Onboarding", sub:"New client setup", kind:"stage",
                  sop:{goal:"Give them the smoothest process possible to minimise the chance of backing out or asking for a refund.", channels:["Email"], automation:[],actions:[]}}
 };
