@@ -38,6 +38,7 @@
   .field textarea{min-height:60px;resize:vertical}
   .seq{border:1px solid var(--line);border-radius:8px;margin-bottom:8px;padding:10px;background:var(--panel2)}
   .sect{margin-top:18px}
+  .timing{background:#2a210a;border:1px solid #b4791e;color:#ffd27a;border-radius:8px;padding:9px 12px;font-size:12.5px;font-weight:700;margin-bottom:16px;line-height:1.4}
   .secth{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#9fb0ff;padding-bottom:7px;margin-bottom:10px;border-bottom:1px solid var(--line)}
   .chk{display:flex;flex-direction:column;gap:8px}
   .chkitem{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;line-height:1.45;color:var(--txt)}
@@ -119,7 +120,10 @@ let NODES = {
                       channels:["Phone","Email","SMS","WhatsApp","Retargeting ads"], automation:["Email sent to prospect","SMS sent to prospect","Prospect's contact details added to retargeting ads list","Email notification sent to Ross (dedicated opt-in inbox, pops up on phone)"],actions:["WhatsApp prospect within 60 seconds of opt-in","Call prospect 15 minutes after opt-in"]}},
   no_purchase:  {label:"No purchase", sub:"", kind:"out",
                  sop:{goal:"Get them to purchase the course and book a call. If there's friction with the purchase but not with booking, get them booked in for a call without the purchase.",
-                      channels:["Email","WhatsApp"], automation:[],actions:[]}},
+                      timing:"Automation & SOP trigger no earlier than 24 hours after opt-in",
+                      channels:["Phone","Email","WhatsApp"],
+                      automation:["Automated email sent to prospect"],
+                      actions:["If there was no response from the Opt-in phone call or WhatsApp \u2192 call them","If we called but no answer \u2192 WhatsApp them","If we called and they answered \u2192 don't WhatsApp them"]}},
   purchased:    {label:"Purchased course", sub:"Low-ticket buy", kind:"stage",
                  sop:{goal:"Get them to watch the course and book a call.", channels:["Phone","Email","SMS","WhatsApp"], automation:[],actions:[]}},
   eng_watched:  {label:["Got access","\u00b7 watched"], sub:"", kind:"out",
@@ -279,6 +283,7 @@ function openDrawer(id){
   if(editMode){
     h+=`<div class="field"><label>Name</label><input id="f_label" value="${esc(labelText(n))}"></div>`;
     h+=`<div class="field"><label>Sub-label</label><input id="f_sub" value="${esc(n.sub||'')}"></div>`;
+    h+=`<div class="field"><label>Timing note (shows as banner)</label><input id="f_timing" value="${esc(sop.timing||'')}"></div>`;
     h+=`<div class="field"><label>SOP goal</label><input id="f_goal" value="${esc(sop.goal||'')}"></div>`;
     h+=`<div class="field"><label>Channels (comma-sep)</label><input id="f_ch" value="${esc((sop.channels||[]).join(', '))}"></div>`;
     h+=`<div class="sect"><div class="secth">Automation</div>${listEdit(id,'automation',sop.automation)}</div>`;
@@ -286,7 +291,8 @@ function openDrawer(id){
     h+=`<div style="margin-top:18px"><button class="primary" onclick="saveDrawer()">Save</button></div>`;
   } else {
     h+=`<h2>${esc(labelText(n))}</h2>`;
-    if(n.sub) h+=`<div class="muted" style="margin-bottom:16px">${esc(n.sub)}</div>`;
+    if(n.sub) h+=`<div class="muted" style="margin-bottom:14px">${esc(n.sub)}</div>`;
+    if(sop.timing) h+=`<div class="timing">⏱ ${esc(sop.timing)}</div>`;
     h+=`<div class="field"><label>SOP goal</label><div class="muted">${esc(sop.goal)||'—'}</div></div>`;
     h+=`<div class="field"><label>Channels</label><div class="muted">${(sop.channels||[]).join(' · ')||'—'}</div></div>`;
     h+=`<div class="sect"><div class="secth">Automation</div>${listView(sop.automation)}</div>`;
@@ -315,6 +321,7 @@ function saveDrawer(){
   const lab=document.getElementById("f_label").value;
   n.label = lab.includes("\n")? lab.split("\n"): lab;
   n.sub=document.getElementById("f_sub").value;
+  n.sop.timing=document.getElementById("f_timing").value;
   n.sop.goal=document.getElementById("f_goal").value;
   n.sop.channels=document.getElementById("f_ch").value.split(",").map(x=>x.trim()).filter(Boolean);
   render(); openDrawer(openId);
