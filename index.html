@@ -37,6 +37,13 @@
   .field input,.field textarea{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:9px;font:inherit;font-size:13px}
   .field textarea{min-height:60px;resize:vertical}
   .seq{border:1px solid var(--line);border-radius:8px;margin-bottom:8px;padding:10px;background:var(--panel2)}
+  .sect{margin-top:18px}
+  .secth{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#9fb0ff;padding-bottom:7px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+  .chk{display:flex;flex-direction:column;gap:8px}
+  .chkitem{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;line-height:1.45;color:var(--txt)}
+  .chkitem .box{flex-shrink:0;width:15px;height:15px;border:1.6px solid var(--new);border-radius:4px;margin-top:2px}
+  .erow{display:flex;gap:8px;margin-bottom:8px;align-items:flex-start}
+  .erow textarea{flex:1;background:var(--bg);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:8px;font:inherit;font-size:13px;min-height:38px;resize:vertical}
   .seq .top{display:flex;gap:8px;margin-bottom:6px}
   .seq .top input{flex:1}.seq .top input.ch{max-width:110px}
   .seq .rm{border-color:#dc2626;color:#ff9b9b;padding:4px 8px}
@@ -109,32 +116,32 @@
 let NODES = {
   optin:        {label:"Opt-in", sub:"Lead lands on page", kind:"stage",
                  sop:{goal:"Get them to purchase the low-ticket course.",
-                      channels:["Phone","Email","SMS","Retargeting ads"], sequence:[]}},
+                      channels:["Phone","Email","SMS","Retargeting ads"], automation:[],actions:[]}},
   no_purchase:  {label:"No purchase", sub:"", kind:"out",
                  sop:{goal:"Get them to purchase the course and book a call. If there's friction with the purchase but not with booking, get them booked in for a call without the purchase.",
-                      channels:["Email","WhatsApp"], sequence:[]}},
+                      channels:["Email","WhatsApp"], automation:[],actions:[]}},
   purchased:    {label:"Purchased course", sub:"Low-ticket buy", kind:"stage",
-                 sop:{goal:"Get them to watch the course and book a call.", channels:["Phone","Email","SMS","WhatsApp"], sequence:[]}},
+                 sop:{goal:"Get them to watch the course and book a call.", channels:["Phone","Email","SMS","WhatsApp"], automation:[],actions:[]}},
   eng_watched:  {label:["Got access","\u00b7 watched"], sub:"", kind:"out",
-                 sop:{goal:"Get them booked in for a call.", channels:[], sequence:[]}},
+                 sop:{goal:"Get them booked in for a call.", channels:[], automation:[],actions:[]}},
   eng_nowatch:  {label:["Got access","\u00b7 didn't watch"], sub:"", kind:"out",
-                 sop:{goal:"Get them to watch the course and book a call. If watching fails, at least get them booked in for a call.", channels:["WhatsApp"], sequence:[]}},
+                 sop:{goal:"Get them to watch the course and book a call. If watching fails, at least get them booked in for a call.", channels:["WhatsApp"], automation:[],actions:[]}},
   eng_noaccess: {label:["Didn't get","access"], sub:"", kind:"out",
-                 sop:{goal:"Get them access, get them to watch the course, and get them booked in for a call. If watching fails, at least get them access and booked in for a call.", channels:["WhatsApp"], sequence:[]}},
+                 sop:{goal:"Get them access, get them to watch the course, and get them booked in for a call. If watching fails, at least get them access and booked in for a call.", channels:["WhatsApp"], automation:[],actions:[]}},
   call_booked:  {label:"Call booked", sub:"Awaiting call", kind:"stage",
-                 sop:{goal:"Get them to show up for the call, and go through the pre-call material / confirmation-page steps beforehand.", channels:["Phone","Email","SMS","WhatsApp"], sequence:[]}},
+                 sop:{goal:"Get them to show up for the call, and go through the pre-call material / confirmation-page steps beforehand.", channels:["Phone","Email","SMS","WhatsApp"], automation:[],actions:[]}},
   no_show:      {label:"No show", sub:"", kind:"out",
-                 sop:{goal:"Get them booked back in for a call.", channels:["Email","SMS","WhatsApp"], sequence:[]}},
+                 sop:{goal:"Get them booked back in for a call.", channels:["Email","SMS","WhatsApp"], automation:[],actions:[]}},
   call_happens: {label:"Call happens", sub:"Live on Zoom", kind:"stage",
-                 sop:{goal:"Get them to make a clear decision on the call — to buy or not.", channels:[], sequence:[]}},
+                 sop:{goal:"Get them to make a clear decision on the call — to buy or not.", channels:[], automation:[],actions:[]}},
   closed:       {label:"Closed", sub:"", kind:"win",
-                 sop:{goal:"Get them onboarded in the best way possible and as fast as possible.", channels:["Email"], sequence:[]}},
+                 sop:{goal:"Get them onboarded in the best way possible and as fast as possible.", channels:["Email"], automation:[],actions:[]}},
   dc_fu_booked: {label:["Didn't close","follow-up booked"], sub:"", kind:"out",
-                 sop:{goal:"Increase the chance of them showing up for the next call and making a decision.", channels:["Email","SMS","WhatsApp"], sequence:[]}},
+                 sop:{goal:"Increase the chance of them showing up for the next call and making a decision.", channels:["Email","SMS","WhatsApp"], automation:[],actions:[]}},
   dc_fu_not:    {label:["Didn't close","follow-up NOT booked"], sub:"", kind:"out",
-                 sop:{goal:"Identify the objections, overcome them, and get them booked back in for a call.", channels:["Email","SMS","WhatsApp"], sequence:[]}},
+                 sop:{goal:"Identify the objections, overcome them, and get them booked back in for a call.", channels:["Email","SMS","WhatsApp"], automation:[],actions:[]}},
   onboarding:   {label:"Onboarding", sub:"New client setup", kind:"stage",
-                 sop:{goal:"Give them the smoothest process possible to minimise the chance of backing out or asking for a refund.", channels:["Email"], sequence:[]}}
+                 sop:{goal:"Give them the smoothest process possible to minimise the chance of backing out or asking for a refund.", channels:["Email"], automation:[],actions:[]}}
 };
 
 /* ============ fixed geometry (matches approved layout) ============ */
@@ -228,7 +235,7 @@ function card(id,role){
   const n=NODES[id];
   const lab=Array.isArray(n.label)?n.label.join(" "):n.label;
   const cls = n.kind==="stage"?"mstage":(n.kind==="win"?"mwin":"mout");
-  const hasSop = n.sop && (n.sop.goal || (n.sop.channels||[]).length || (n.sop.sequence||[]).length);
+  const hasSop = n.sop && (n.sop.goal || (n.sop.channels||[]).length || (n.sop.automation||[]).length || (n.sop.actions||[]).length);
   return `<div class="mcard ${cls}" data-id="${id}">
     <div class="mtitle">${esc(lab)}${n.sub?` <span class="msub">${esc(n.sub)}</span>`:''}</div>
     <div class="mgoal">${hasSop?esc(n.sop.goal||'Tap to open SOP'):'<span class="mempty">No SOP yet \u2014 tap to add</span>'}</div>
@@ -265,42 +272,44 @@ function labelText(n){return Array.isArray(n.label)?n.label.join(" "):n.label;}
 
 function openDrawer(id){
   const n=NODES[id]; if(!n)return; openId=id;
+  const sop=n.sop;
   drawer.classList.add("open");
   let h=`<button class="close" onclick="closeDrawer()">✕</button>`;
-  h+=`<span class="tag ${n.kind==='win'?'win':''}">${n.kind==='stage'?'STAGE':n.kind==='win'?'WIN':'OUTCOME'} · SOP</span>`;
+  h+=`<span class="tag ${n.kind==='win'?'win':''}">${n.kind==='stage'?'STAGE':n.kind==='win'?'WIN':'OUTCOME'}</span>`;
   if(editMode){
     h+=`<div class="field"><label>Name</label><input id="f_label" value="${esc(labelText(n))}"></div>`;
     h+=`<div class="field"><label>Sub-label</label><input id="f_sub" value="${esc(n.sub||'')}"></div>`;
-    h+=`<div class="field"><label>SOP goal</label><input id="f_goal" value="${esc(n.sop.goal||'')}"></div>`;
-    h+=`<div class="field"><label>Channels (comma-sep)</label><input id="f_ch" value="${esc((n.sop.channels||[]).join(', '))}"></div>`;
-    h+=`<label style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--mut)">Sequence</label>`;
-    (n.sop.sequence||[]).forEach((s,i)=>{
-      h+=`<div class="seq"><div class="top">
-        <input placeholder="timing" value="${esc(s.t||'')}" oninput="upSeq('${id}',${i},'t',this.value)">
-        <input class="ch" placeholder="channel" value="${esc(s.ch||'')}" oninput="upSeq('${id}',${i},'ch',this.value)">
-        <button class="rm" onclick="rmSeq('${id}',${i})">✕</button></div>
-        <textarea placeholder="message / action" oninput="upSeq('${id}',${i},'msg',this.value)">${esc(s.msg||'')}</textarea></div>`;
-    });
-    h+=`<button onclick="addSeq('${id}')">+ Add step</button>`;
+    h+=`<div class="field"><label>SOP goal</label><input id="f_goal" value="${esc(sop.goal||'')}"></div>`;
+    h+=`<div class="field"><label>Channels (comma-sep)</label><input id="f_ch" value="${esc((sop.channels||[]).join(', '))}"></div>`;
+    h+=`<div class="sect"><div class="secth">Automation</div>${listEdit(id,'automation',sop.automation)}</div>`;
+    h+=`<div class="sect"><div class="secth">SOP</div>${listEdit(id,'actions',sop.actions)}</div>`;
     h+=`<div style="margin-top:18px"><button class="primary" onclick="saveDrawer()">Save</button></div>`;
   } else {
     h+=`<h2>${esc(labelText(n))}</h2>`;
     if(n.sub) h+=`<div class="muted" style="margin-bottom:16px">${esc(n.sub)}</div>`;
-    h+=`<div class="field"><label>SOP goal</label><div class="muted">${esc(n.sop.goal)||'—'}</div></div>`;
-    h+=`<div class="field"><label>Channels</label><div class="muted">${(n.sop.channels||[]).join(' · ')||'—'}</div></div>`;
-    h+=`<label style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--mut)">Sequence</label>`;
-    if((n.sop.sequence||[]).length){
-      n.sop.sequence.forEach(s=>{h+=`<div class="seq"><div class="top"><b style="font-size:12px;color:#5b6cff">${esc(s.t||'')}</b><span class="muted" style="margin-left:auto">${esc(s.ch||'')}</span></div><div class="muted">${esc(s.msg||'')}</div></div>`;});
-    } else {
-      h+=`<div class="placeholder">No SOP yet — turn on Edit mode to add the goal, channels and sequence for this step.</div>`;
-    }
+    h+=`<div class="field"><label>SOP goal</label><div class="muted">${esc(sop.goal)||'—'}</div></div>`;
+    h+=`<div class="field"><label>Channels</label><div class="muted">${(sop.channels||[]).join(' · ')||'—'}</div></div>`;
+    h+=`<div class="sect"><div class="secth">Automation</div>${listView(sop.automation)}</div>`;
+    h+=`<div class="sect"><div class="secth">SOP</div>${listView(sop.actions)}</div>`;
   }
   dInner.innerHTML=h;
 }
+function listView(items){
+  if(!items||!items.length) return `<div class="placeholder">Nothing yet — turn on Edit mode to add items.</div>`;
+  return `<div class="chk">`+items.map(t=>`<div class="chkitem"><span class="box"></span><span>${esc(t)}</span></div>`).join('')+`</div>`;
+}
+function listEdit(id,key,items){
+  let h='';
+  (items||[]).forEach((t,i)=>{
+    h+=`<div class="erow"><textarea rows="1" placeholder="checklist item" oninput="upItem('${id}','${key}',${i},this.value)">${esc(t)}</textarea><button class="rm" onclick="rmItem('${id}','${key}',${i})">✕</button></div>`;
+  });
+  h+=`<button onclick="addItem('${id}','${key}')">+ Add item</button>`;
+  return h;
+}
 function closeDrawer(){drawer.classList.remove("open");openId=null;}
-function addSeq(id){const n=NODES[id];n.sop.sequence=n.sop.sequence||[];n.sop.sequence.push({t:'',ch:'',msg:''});openDrawer(id);}
-function rmSeq(id,i){NODES[id].sop.sequence.splice(i,1);openDrawer(id);}
-function upSeq(id,i,k,v){NODES[id].sop.sequence[i][k]=v;}
+function addItem(id,key){const n=NODES[id];n.sop[key]=n.sop[key]||[];n.sop[key].push('');openDrawer(id);}
+function rmItem(id,key,i){NODES[id].sop[key].splice(i,1);openDrawer(id);}
+function upItem(id,key,i,v){NODES[id].sop[key][i]=v;}
 function saveDrawer(){
   const n=NODES[openId];
   const lab=document.getElementById("f_label").value;
