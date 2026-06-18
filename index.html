@@ -109,20 +109,18 @@
 let NODES = {
   optin:        {label:"Opt-in", sub:"Lead lands on page", kind:"stage",
                  sop:{goal:"Get them to purchase the low-ticket course.",
-                      channels:["Phone","Email","SMS","WhatsApp","Retargeting ads"], sequence:[]}},
+                      channels:["Phone","Email","SMS","Retargeting ads"], sequence:[]}},
   no_purchase:  {label:"No purchase", sub:"", kind:"out",
                  sop:{goal:"Get them to purchase the course and book a call. If there's friction with the purchase but not with booking, get them booked in for a call without the purchase.",
                       channels:["Email","WhatsApp"], sequence:[]}},
   purchased:    {label:"Purchased course", sub:"Low-ticket buy", kind:"stage",
                  sop:{goal:"Get them to watch the course and book a call.", channels:["Phone","Email","SMS","WhatsApp"], sequence:[]}},
-  ab_yy:        {label:["Access \u2713","Book \u2713"], sub:"", kind:"out",
-                 sop:{goal:"Get them to watch the course and show up for the call.", channels:["Email"], sequence:[]}},
-  ab_ny:        {label:["Access \u2717","Book \u2713"], sub:"", kind:"out",
-                 sop:{goal:"Get them to gain access, watch the course, and show up for the call.", channels:["Email"], sequence:[]}},
-  ab_yn:        {label:["Access \u2713","Book \u2717"], sub:"", kind:"out",
-                 sop:{goal:"Get them to watch the course, book a call, and show up.", channels:["Email","SMS","WhatsApp"], sequence:[]}},
-  ab_nn:        {label:["Access \u2717","Book \u2717"], sub:"", kind:"out",
-                 sop:{goal:"Get them to gain access, watch the course, book a call, and show up.", channels:["Email","SMS","WhatsApp"], sequence:[]}},
+  eng_watched:  {label:["Got access","\u00b7 watched"], sub:"", kind:"out",
+                 sop:{goal:"", channels:[], sequence:[]}},
+  eng_nowatch:  {label:["Got access","\u00b7 didn't watch"], sub:"", kind:"out",
+                 sop:{goal:"", channels:[], sequence:[]}},
+  eng_noaccess: {label:["Didn't get","access"], sub:"", kind:"out",
+                 sop:{goal:"", channels:[], sequence:[]}},
   call_booked:  {label:"Call booked", sub:"Awaiting call", kind:"stage",
                  sop:{goal:"Get them to show up for the call, and go through the pre-call material / confirmation-page steps beforehand.", channels:["Phone","Email","SMS","WhatsApp"], sequence:[]}},
   no_show:      {label:"No show", sub:"", kind:"out",
@@ -172,12 +170,10 @@ function buildDesktop(){
   path("M560,88 L560,118 L920,118 L920,79",MUT,"a"); lab(740,108,"no purchase",MUT);
   // optin -> purchased
   path("M560,88 L560,200",GRN,"g"); lab(612,150,"PURCHASED",GRN);
-  // purchased -> 4 leaves
-  [[170],[375],[745],[950]].forEach(([cx])=>path(`M560,258 L${cx},298`,MUT,"a"));
-  // book-tick leaves -> call booked
-  path("M170,346 L170,400 L560,400 L560,468",GRN,"g");
-  path("M375,346 L375,378 L560,378 L560,468",GRN,"g");
-  lab(440,418,"BOOKED \u2192 continues",GRN);
+  // purchased -> 3 engagement leaves (dead-ends)
+  [[175],[380],[880]].forEach(([cx])=>path(`M560,258 L${cx},298`,MUT,"a"));
+  // purchased -> call booked (straight spine, like opt-in -> purchased)
+  path("M560,258 L560,468",GRN,"g"); lab(622,400,"NEXT STAGE",GRN);
   // call booked -> no show
   path("M560,528 L560,512 L920,512 L920,496",MUT,"a"); lab(740,548,"no show",MUT);
   // call booked -> call happens
@@ -193,10 +189,9 @@ function buildDesktop(){
   P.push(nodeSVG("optin",560,30,270,58));
   P.push(nodeSVG("no_purchase",920,33,200,46));
   P.push(nodeSVG("purchased",560,200,270,58));
-  P.push(nodeSVG("ab_yy",170,300,150,46));
-  P.push(nodeSVG("ab_ny",375,300,150,46));
-  P.push(nodeSVG("ab_yn",745,300,150,46));
-  P.push(nodeSVG("ab_nn",950,300,150,46));
+  P.push(nodeSVG("eng_watched",175,300,185,46));
+  P.push(nodeSVG("eng_nowatch",380,300,185,46));
+  P.push(nodeSVG("eng_noaccess",880,300,185,46));
   P.push(nodeSVG("call_booked",560,470,270,58));
   P.push(nodeSVG("no_show",920,473,200,46));
   P.push(nodeSVG("call_happens",560,640,270,58));
@@ -224,7 +219,7 @@ function buildDesktop(){
 /* ============ mobile: vertical stack of tappable cards ============ */
 const FLOW=[
   {stage:"optin",        outcomes:["no_purchase"],                       next:"PURCHASED"},
-  {stage:"purchased",    outcomes:["ab_yy","ab_ny","ab_yn","ab_nn"],     next:"BOOKED \u2192 continues"},
+  {stage:"purchased",    outcomes:["eng_watched","eng_nowatch","eng_noaccess"],     next:"BOOKED \u2192 continues"},
   {stage:"call_booked",  outcomes:["no_show"],                           next:"SHOWS UP"},
   {stage:"call_happens", outcomes:["closed","dc_fu_booked","dc_fu_not"], next:"CLOSED \u2192 onboard"},
   {stage:"onboarding",   outcomes:[],                                    next:null}
