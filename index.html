@@ -116,7 +116,7 @@
 let NODES = {
   optin:        {label:"Opt-in", sub:"Lead lands on page", kind:"stage",
                  sop:{goal:"Get them to purchase the low-ticket course.",
-                      channels:["Phone","Email","SMS","Retargeting ads"], automation:[],actions:[]}},
+                      channels:["Phone","Email","SMS","Retargeting ads"], automation:["Email sent to prospect","SMS sent to prospect","Prospect's contact details added to retargeting ads list"],actions:[]}},
   no_purchase:  {label:"No purchase", sub:"", kind:"out",
                  sop:{goal:"Get them to purchase the course and book a call. If there's friction with the purchase but not with booking, get them booked in for a call without the purchase.",
                       channels:["Email","WhatsApp"], automation:[],actions:[]}},
