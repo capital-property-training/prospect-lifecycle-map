@@ -43,8 +43,6 @@ Purchased course ─▶ Got access · watched ─┬ booked ─▶ Call booked
                                           └ didn't book ─▶ Didn't book [END]
                  ─▶ Got access · didn't watch ─┬ booked ─▶ Call booked
                                                └ didn't book ─▶ Didn't book [END]
-                 ─▶ Didn't get access ─┬ booked ─▶ Call booked
-                                       └ didn't book ─▶ Didn't book [END]
 Call booked ─ no show ─▶ No show [END]
             └ shows up ─▶ Call happens
 Call happens ─▶ Closed ─▶ Onboarding [END]
@@ -144,31 +142,6 @@ Call happens ─▶ Closed ─▶ Onboarding [END]
 2. If no reply → call them
 3. On the call, push to watch + book; if they won't watch, get the call booked anyway
 
-### Didn't get access  *(outcome)*
-**Trigger / timing:** Triggers 4 hours after purchase — only if they haven't activated access (clicked 'Join Now')
-**Goal:** Get them access.
-**Channels:** Email · SMS · WhatsApp · Phone
-
-**Automation:**
-1. Automated email sent to prospect (flags the access issue + re-sends the Skool 'Join Now' invite link)
-2. Automated SMS sent to prospect (re-sends the join link)
-
-**SOP (manual):**
-1. WhatsApp the prospect to check what went wrong with access and walk them in
-2. If no reply → call them and get them in live (talk them through clicking Join)
-
-### Didn't book — Didn't get access  *(outcome)*
-**Trigger / timing:** Triggers 24 hours after purchase — only if no call has been booked
-**Goal:** Get them to book a call.
-**Channels:** Email · SMS · WhatsApp
-
-**Automation:**
-1. Automated email sent to prospect (booking link)
-2. Automated SMS sent to prospect (booking link)
-
-**SOP (manual):**
-1. WhatsApp the prospect to get them to book
-
 ### Call booked  *(stage)*
 **Goal:** Screen the prospect first — how qualified they are, what angle to take, and whether to take the call at all. Then get them to show up having gone through the pre-call material.
 **Channels:** Phone · Email · SMS · WhatsApp
@@ -258,25 +231,20 @@ Call happens ─▶ Closed ─▶ Onboarding [END]
 **SOP (manual):**
 - none
 
-## The 16 prospect journeys
+## The 11 prospect journeys
 Every distinct path a prospect can take (see touchpoints page for contact-load per path):
 
 1. Opt-in → No purchase
 2. Opt-in → Purchased → Got access · watched → Didn't book
 3. Opt-in → Purchased → Got access · didn't watch → Didn't book
-4. Opt-in → Purchased → Didn't get access → Didn't book
-5. Opt-in → Purchased → Got access · watched → booked → Call booked → No show
-6. Opt-in → Purchased → Got access · watched → booked → Call booked → shows up → Call happens → Closed → Onboarding
-7. Opt-in → Purchased → Got access · watched → booked → Call booked → shows up → Call happens → Didn't close (follow-up booked)
-8. Opt-in → Purchased → Got access · watched → booked → Call booked → shows up → Call happens → Didn't close (no follow-up)
-9. Opt-in → Purchased → Got access · didn't watch → booked → Call booked → No show
-10. Opt-in → Purchased → Got access · didn't watch → booked → Call booked → shows up → Call happens → Closed → Onboarding
-11. Opt-in → Purchased → Got access · didn't watch → booked → Call booked → shows up → Call happens → Didn't close (follow-up booked)
-12. Opt-in → Purchased → Got access · didn't watch → booked → Call booked → shows up → Call happens → Didn't close (no follow-up)
-13. Opt-in → Purchased → Didn't get access → booked → Call booked → No show
-14. Opt-in → Purchased → Didn't get access → booked → Call booked → shows up → Call happens → Closed → Onboarding
-15. Opt-in → Purchased → Didn't get access → booked → Call booked → shows up → Call happens → Didn't close (follow-up booked)
-16. Opt-in → Purchased → Didn't get access → booked → Call booked → shows up → Call happens → Didn't close (no follow-up)
+4. Opt-in → Purchased → Got access · watched → booked → Call booked → No show
+5. Opt-in → Purchased → Got access · watched → booked → Call booked → shows up → Call happens → Closed → Onboarding
+6. Opt-in → Purchased → Got access · watched → booked → Call booked → shows up → Call happens → Didn't close (follow-up booked)
+7. Opt-in → Purchased → Got access · watched → booked → Call booked → shows up → Call happens → Didn't close (no follow-up)
+8. Opt-in → Purchased → Got access · didn't watch → booked → Call booked → No show
+9. Opt-in → Purchased → Got access · didn't watch → booked → Call booked → shows up → Call happens → Closed → Onboarding
+10. Opt-in → Purchased → Got access · didn't watch → booked → Call booked → shows up → Call happens → Didn't close (follow-up booked)
+11. Opt-in → Purchased → Got access · didn't watch → booked → Call booked → shows up → Call happens → Didn't close (no follow-up)
 
 ## Key automation facts
 - **Skool access is fully hands-off via Zapier:** GHL purchase → Zap auto-invites to Skool with course access granted → prospect clicks 'Join Now' in the Skool invite email to activate. No manual approval. Zapier ~$20/mo (Starter), the zap itself is free; ~1 task per purchase.

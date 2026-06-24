@@ -140,12 +140,6 @@ let NODES = {
                       channels:["Email","SMS","WhatsApp"],
                       automation:["Automated email sent to prospect (reminder to watch + link to Lesson 1)","Automated SMS sent to prospect (reminder to watch + link to Lesson 1)"],
                       actions:["WhatsApp the prospect to nudge them to watch the course"]}},
-  eng_noaccess: {label:["Didn't get","access"], sub:"", kind:"out",
-                 sop:{goal:"Get them access.",
-                      timing:"Triggers 4 hours after purchase \u2014 only if they haven't activated access (clicked 'Join Now')",
-                      channels:["Email","SMS","WhatsApp","Phone"],
-                      automation:["Automated email sent to prospect (flags the access issue + re-sends the Skool 'Join Now' invite link)","Automated SMS sent to prospect (re-sends the join link)"],
-                      actions:["WhatsApp the prospect to check what went wrong with access and walk them in","If no reply \u2192 call them and get them in live (talk them through clicking Join)"]}},
   nb_watched:   {label:"Didn't book", sub:"", ctx:"Got access \u00b7 watched", kind:"out",
                  sop:{goal:"Get them to book a call.",
                       timing:"Triggers 24 hours after Lesson 1 is marked complete \u2014 only if no call has been booked",
@@ -158,12 +152,6 @@ let NODES = {
                       channels:["Email","SMS","WhatsApp","Phone"],
                       automation:["Automated email sent to prospect (link to Lesson 1 + booking link)","Automated SMS sent to prospect (link to Lesson 1 + booking link)"],
                       actions:["WhatsApp the prospect to nudge them to watch and book","If no reply \u2192 call them","On the call, push to watch + book; if they won't watch, get the call booked anyway"]}},
-  nb_noaccess:  {label:"Didn't book", sub:"", ctx:"Didn't get access", kind:"out",
-                 sop:{goal:"Get them to book a call.",
-                      timing:"Triggers 24 hours after purchase \u2014 only if no call has been booked",
-                      channels:["Email","SMS","WhatsApp"],
-                      automation:["Automated email sent to prospect (booking link)","Automated SMS sent to prospect (booking link)"],
-                      actions:["WhatsApp the prospect to get them to book"]}},
   call_booked:  {label:"Call booked", sub:"Awaiting call", kind:"stage",
                  sop:{goal:"Screen the prospect first \u2014 how qualified they are, what angle to take, and whether to take the call at all. Then get them to show up having gone through the pre-call material.",
                       channels:["Phone","Email","SMS","WhatsApp"],
@@ -229,18 +217,15 @@ function buildDesktop(){
   path("M560,88 L560,74 L920,74 L920,56",MUT,"a"); lab(740,108,"no purchase",MUT);
   // optin -> purchased
   path("M560,88 L560,200",GRN,"g"); lab(612,150,"PURCHASED",GRN);
-  // purchased -> 3 engagement
-  path("M560,258 L175,298",MUT,"a");
-  path("M560,258 L560,298",MUT,"a");
-  path("M560,258 L945,298",MUT,"a");
+  // purchased -> 2 engagement
+  path("M560,258 L380,298",MUT,"a");
+  path("M560,258 L740,298",MUT,"a");
   // engagement -> didn't-book dead-ends (straight down)
-  path("M175,350 L175,408",MUT,"a");
-  path("M560,350 L560,408",MUT,"a");
-  path("M945,350 L945,408",MUT,"a");
+  path("M380,350 L380,408",MUT,"a");
+  path("M740,350 L740,408",MUT,"a");
   // booked feeders -> bus (y500) -> call booked
-  path("M265,332 L265,500 L560,500",GRN);
+  path("M470,332 L470,500 L560,500",GRN);
   path("M650,332 L650,500 L560,500",GRN);
-  path("M855,332 L855,500 L560,500",GRN);
   path("M560,500 L560,532",GRN,"g"); lab(638,470,"BOOKED",GRN);
   // call booked -> no show
   path("M560,590 L560,576 L920,576 L920,558",MUT,"a"); lab(740,610,"no show",MUT);
@@ -257,12 +242,10 @@ function buildDesktop(){
   P.push(nodeSVG("optin",560,30,270,58));
   P.push(nodeSVG("no_purchase",920,33,200,46));
   P.push(nodeSVG("purchased",560,200,270,58));
-  P.push(nodeSVG("eng_watched",175,300,180,50));
-  P.push(nodeSVG("eng_nowatch",560,300,180,50));
-  P.push(nodeSVG("eng_noaccess",945,300,180,50));
-  P.push(nodeSVG("nb_watched",175,410,165,46));
-  P.push(nodeSVG("nb_nowatch",560,410,165,46));
-  P.push(nodeSVG("nb_noaccess",945,410,165,46));
+  P.push(nodeSVG("eng_watched",380,300,180,50));
+  P.push(nodeSVG("eng_nowatch",740,300,180,50));
+  P.push(nodeSVG("nb_watched",380,410,165,46));
+  P.push(nodeSVG("nb_nowatch",740,410,165,46));
   P.push(nodeSVG("call_booked",560,532,270,58));
   P.push(nodeSVG("no_show",920,535,200,46));
   P.push(nodeSVG("call_happens",560,700,270,58));
@@ -290,7 +273,7 @@ function buildDesktop(){
 /* ============ mobile: vertical stack of tappable cards ============ */
 const FLOW=[
   {stage:"optin",        outcomes:["no_purchase"],                       next:"PURCHASED"},
-  {stage:"purchased",    outcomes:["eng_watched","nb_watched","eng_nowatch","nb_nowatch","eng_noaccess","nb_noaccess"], next:"BOOKED \u2192 Call booked"},
+  {stage:"purchased",    outcomes:["eng_watched","nb_watched","eng_nowatch","nb_nowatch"], next:"BOOKED \u2192 Call booked"},
   {stage:"call_booked",  outcomes:["no_show"],                           next:"SHOWS UP"},
   {stage:"call_happens", outcomes:["closed","dc_fu_booked","dc_fu_not"], next:"CLOSED \u2192 onboard"},
   {stage:"onboarding",   outcomes:[],                                    next:null}
