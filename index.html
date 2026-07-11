@@ -131,9 +131,14 @@ let NODES = {
                  sop:{goal:"Get them to watch the course and book a call.",
                       channels:["Email","SMS","WhatsApp"],
                       automation:["Email 1 \u2014 \u201cThe Rent-to-Rent Fast Track Access 🔑\u201d \u00b7 on purchase","Email 2 \u2014 \u201cThe truth about why you're still stuck ❌\u201d \u00b7 day 1","Email 3 \u2014 \u201cWhy landlords say no (and how to make them say yes)\u201d \u00b7 day 2","Email 4 \u2014 \u201cThe \u00a315,000 mistake (and how to avoid it)\u201d \u00b7 day 3","Email 5 \u2014 \u201cAre you actually going to do this?\u201d \u00b7 day 4","Automated SMS sent to prospect (purchase confirmation + access instructions)","Zapier auto-invites prospect to Skool with course access granted \u2014 prospect clicks 'Join Now' in the Skool invite email to activate","Slack channel notification to team (new purchase)"],
-                      actions:["WhatsApp the prospect 2 hours after purchase to check they got access \u2014 guide them through if not"]}},
+                      actions:["WhatsApp the prospect within 15 minutes of purchase with the welcome video, and check they got access \u2014 guide them through if not","Call them straight after sending the WhatsApp \u2014 don't wait for a reply","If no answer \u2192 leave a voicemail, then follow up by SMS","Log the interaction and schedule a redial for 24\u201348 hours if no contact was made"]}},
   eng_watched:  {label:["Got access","\u00b7 watched"], sub:"", kind:"out",
                  sop:{goal:"Get them booked in for a call.", channels:[], automation:[],actions:[]}},
+  eng_noaccess: {label:"Didn't get access", sub:"", kind:"out",
+                 sop:{goal:"Get them access.",
+                      channels:["Email","SMS","WhatsApp","Phone"],
+                      automation:["Automated email sent to prospect (flags the access issue + re-sends the Skool 'Join Now' invite link)","Automated SMS sent to prospect (re-sends the join link)"],
+                      actions:["WhatsApp the prospect to check what went wrong with access and walk them in","If no reply \u2192 call them and get them in live (talk them through clicking Join)"]}},
   eng_nowatch:  {label:["Got access","\u00b7 didn't watch"], sub:"", kind:"out",
                  sop:{goal:"Get them to watch the course.",
                       timing:"Triggers 24 hours after access \u2014 only if Lesson 1 isn't marked complete",
@@ -152,17 +157,22 @@ let NODES = {
                       channels:["Email","SMS","WhatsApp","Phone"],
                       automation:["Automated email sent to prospect (link to Lesson 1 + booking link)","Automated SMS sent to prospect (link to Lesson 1 + booking link)"],
                       actions:["WhatsApp the prospect to nudge them to watch and book","If no reply \u2192 call them","On the call, push to watch + book; if they won't watch, get the call booked anyway"]}},
+  nb_noaccess:  {label:"Didn't book", sub:"", ctx:"Didn't get access", kind:"out",
+                 sop:{goal:"Get them to book a call.",
+                      channels:["Email","SMS","WhatsApp"],
+                      automation:["Automated email sent to prospect (booking link)","Automated SMS sent to prospect (booking link)"],
+                      actions:["WhatsApp the prospect to get them to book"]}},
   call_booked:  {label:"Call booked", sub:"Awaiting call", kind:"stage",
                  sop:{goal:"Screen the prospect first \u2014 how qualified they are, what angle to take, and whether to take the call at all. Then get them to show up having gone through the pre-call material.",
                       channels:["Phone","Email","SMS","WhatsApp"],
                       automation:["Booking confirmation email \u2014 on booking","Reminder email \u2014 23 hours before the call","Reminder email \u2014 closer to the call","SMS confirmation","Slack notification to team of new booking"],
-                      actions:["Screen the prospect from their booking-form answers \u2014 qualify, pick the angle, decide keep / reschedule / decline","WhatsApp a personal confirmation ahead of the call","Check they've gone through the pre-call material; nudge if not"]}},
+                      actions:["Screen the prospect from their booking-form answers \u2014 qualify, pick the angle, decide keep / reschedule / decline","WhatsApp a personal confirmation ahead of the call","Check they've gone through the pre-call material; nudge if not","Day before the call: WhatsApp reminder with date, time and a nudge to review the pre-call material","1 hour before the call: WhatsApp 'still good for [time]?' \u2014 if no reply within 20 minutes, call them"]}},
   no_show:      {label:"No show", sub:"", kind:"out",
                  sop:{goal:"Get them to respond, figure out why they didn't show, and get them booked back in.",
                       timing:"Automation triggers ~15 minutes after the missed call time",
                       channels:["Phone","Email","SMS","WhatsApp"],
                       automation:["Automated 'missed you' email sent to prospect (rebooking link)","Automated SMS sent to prospect (rebooking link)","Slack notification to team of the no-show"],
-                      actions:["WhatsApp the prospect to find out what happened and get them rebooked","If no reply \u2192 call them","Once you reach them, get the call rebooked"]}},
+                      actions:["Call the prospect within 30 minutes to find out what happened \u2014 warm tone, no judgement","If no answer \u2192 WhatsApp them","Once you reach them, get the call rebooked"]}},
   call_happens: {label:"Call happens", sub:"Live on Zoom", kind:"stage",
                  sop:{goal:"Get them to make a clear decision on the call — to buy or not.",
                       channels:["Zoom"],
@@ -217,15 +227,18 @@ function buildDesktop(){
   path("M560,88 L560,74 L920,74 L920,56",MUT,"a"); lab(740,108,"no purchase",MUT);
   // optin -> purchased
   path("M560,88 L560,200",GRN,"g"); lab(612,150,"PURCHASED",GRN);
-  // purchased -> 2 engagement
-  path("M560,258 L380,298",MUT,"a");
-  path("M560,258 L740,298",MUT,"a");
+  // purchased -> 3 engagement
+  path("M560,258 L260,298",MUT,"a");
+  path("M560,258 L560,298",MUT,"a");
+  path("M560,258 L860,298",MUT,"a");
   // engagement -> didn't-book dead-ends (straight down)
-  path("M380,350 L380,408",MUT,"a");
-  path("M740,350 L740,408",MUT,"a");
+  path("M260,350 L260,408",MUT,"a");
+  path("M560,350 L560,408",MUT,"a");
+  path("M860,350 L860,408",MUT,"a");
   // booked feeders -> bus (y500) -> call booked
-  path("M470,332 L470,500 L560,500",GRN);
-  path("M650,332 L650,500 L560,500",GRN);
+  path("M350,332 L350,500 L560,500",GRN);
+  path("M560,332 L560,500",GRN);
+  path("M770,332 L770,500 L560,500",GRN);
   path("M560,500 L560,532",GRN,"g"); lab(638,470,"BOOKED",GRN);
   // call booked -> no show
   path("M560,590 L560,576 L920,576 L920,558",MUT,"a"); lab(740,610,"no show",MUT);
@@ -242,10 +255,12 @@ function buildDesktop(){
   P.push(nodeSVG("optin",560,30,270,58));
   P.push(nodeSVG("no_purchase",920,33,200,46));
   P.push(nodeSVG("purchased",560,200,270,58));
-  P.push(nodeSVG("eng_watched",380,300,180,50));
-  P.push(nodeSVG("eng_nowatch",740,300,180,50));
-  P.push(nodeSVG("nb_watched",380,410,165,46));
-  P.push(nodeSVG("nb_nowatch",740,410,165,46));
+  P.push(nodeSVG("eng_watched",260,300,180,50));
+  P.push(nodeSVG("eng_nowatch",560,300,180,50));
+  P.push(nodeSVG("eng_noaccess",860,300,200,50));
+  P.push(nodeSVG("nb_watched",260,410,165,46));
+  P.push(nodeSVG("nb_nowatch",560,410,165,46));
+  P.push(nodeSVG("nb_noaccess",860,410,165,46));
   P.push(nodeSVG("call_booked",560,532,270,58));
   P.push(nodeSVG("no_show",920,535,200,46));
   P.push(nodeSVG("call_happens",560,700,270,58));
@@ -273,7 +288,7 @@ function buildDesktop(){
 /* ============ mobile: vertical stack of tappable cards ============ */
 const FLOW=[
   {stage:"optin",        outcomes:["no_purchase"],                       next:"PURCHASED"},
-  {stage:"purchased",    outcomes:["eng_watched","nb_watched","eng_nowatch","nb_nowatch"], next:"BOOKED \u2192 Call booked"},
+  {stage:"purchased",    outcomes:["eng_watched","nb_watched","eng_nowatch","nb_nowatch","eng_noaccess","nb_noaccess"], next:"BOOKED \u2192 Call booked"},
   {stage:"call_booked",  outcomes:["no_show"],                           next:"SHOWS UP"},
   {stage:"call_happens", outcomes:["closed","dc_fu_booked","dc_fu_not"], next:"CLOSED \u2192 onboard"},
   {stage:"onboarding",   outcomes:[],                                    next:null}
