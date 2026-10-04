@@ -44,6 +44,8 @@
   .secth{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#9fb0ff;padding-bottom:7px;margin-bottom:10px;border-bottom:1px solid var(--line)}
   .chk{display:flex;flex-direction:column;gap:8px}
   .chkitem{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;line-height:1.45;color:var(--txt)}
+  .ilink{color:#9fb0ff;font-weight:700;text-decoration:none;border-bottom:1px solid #2C3E8F}
+  .ilink:hover{color:#fff;border-color:#fff}
   .chkitem .box{flex-shrink:0;width:15px;height:15px;border:1.6px solid var(--new);border-radius:4px;margin-top:2px}
   .erow{display:flex;gap:8px;margin-bottom:8px;align-items:flex-start}
   .erow textarea{flex:1;background:var(--bg);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:8px;font:inherit;font-size:13px;min-height:38px;resize:vertical}
@@ -121,66 +123,62 @@ let NODES = {
   purchased:    {label:"Purchased course", sub:"Low-ticket buy", kind:"stage",
                  sop:{goal:"Get them to watch the course and book a call.",
                       channels:["Email","SMS","WhatsApp"],
-                      automation:["Email 1 \u2014 \u201cThe Rent-to-Rent Fast Track Access 🔑\u201d \u00b7 on purchase","Email 2 \u2014 \u201cThe truth about why you're still stuck ❌\u201d \u00b7 day 1","Email 3 \u2014 \u201cWhy landlords say no (and how to make them say yes)\u201d \u00b7 day 2","Email 4 \u2014 \u201cThe \u00a315,000 mistake (and how to avoid it)\u201d \u00b7 day 3","Email 5 \u2014 \u201cAre you actually going to do this?\u201d \u00b7 day 4","Automated SMS sent to prospect (purchase confirmation + access instructions)","Zapier auto-invites prospect to Skool with course access granted \u2014 prospect clicks 'Join Now' in the Skool invite email to activate","Slack channel notification to team (new purchase)"],
-                      actions:["WhatsApp the prospect within 15 minutes of purchase with the welcome video, and check they got access \u2014 guide them through if not","Call them straight after sending the WhatsApp \u2014 don't wait for a reply","If no answer \u2192 leave a voicemail, then follow up by SMS","Log the interaction and schedule a redial for 24\u201348 hours if no contact was made"]}},
+                      automation:[],
+                      actions:[]}},
   eng_watched:  {label:["Got access","\u00b7 watched"], sub:"", kind:"out",
                  sop:{goal:"Get them booked in for a call.", channels:[], automation:[],actions:[]}},
   eng_noaccess: {label:"Didn't get access", sub:"", kind:"out",
                  sop:{goal:"Get them access.",
                       channels:["Email","SMS","WhatsApp","Phone"],
-                      automation:["Automated email sent to prospect (flags the access issue + re-sends the Skool 'Join Now' invite link)","Automated SMS sent to prospect (re-sends the join link)"],
-                      actions:["WhatsApp the prospect to check what went wrong with access and walk them in","If no reply \u2192 call them and get them in live (talk them through clicking Join)"]}},
+                      automation:[],
+                      actions:[]}},
   eng_nowatch:  {label:["Got access","\u00b7 didn't watch"], sub:"", kind:"out",
                  sop:{goal:"Get them to watch the course.",
-                      timing:"Triggers 24 hours after access \u2014 only if Lesson 1 isn't marked complete",
                       channels:["Email","SMS","WhatsApp"],
-                      automation:["Automated email sent to prospect (reminder to watch + link to Lesson 1)","Automated SMS sent to prospect (reminder to watch + link to Lesson 1)"],
-                      actions:["WhatsApp the prospect to nudge them to watch the course"]}},
+                      automation:[],
+                      actions:[]}},
   nb_watched:   {label:"Didn't book", sub:"", ctx:"Got access \u00b7 watched", kind:"out",
                  sop:{goal:"Get them to book a call.",
-                      timing:"Triggers 24 hours after Lesson 1 is marked complete \u2014 only if no call has been booked",
                       channels:["Email","SMS","WhatsApp","Phone"],
-                      automation:["Automated email sent to prospect (booking link)","Automated SMS sent to prospect (booking link)"],
-                      actions:["WhatsApp the prospect referencing the course they watched","If no reply \u2192 call them"]}},
+                      automation:[],
+                      actions:[]}},
   nb_nowatch:   {label:"Didn't book", sub:"", ctx:"Got access \u00b7 didn't watch", kind:"out",
                  sop:{goal:"Plan A: get them to watch the course and book a call. Plan B: if watching fails, at least get them to book a call.",
-                      timing:"Triggers 48 hours after access \u2014 only if Lesson 1 isn't complete and no call has been booked",
                       channels:["Email","SMS","WhatsApp","Phone"],
-                      automation:["Automated email sent to prospect (link to Lesson 1 + booking link)","Automated SMS sent to prospect (link to Lesson 1 + booking link)"],
-                      actions:["WhatsApp the prospect to nudge them to watch and book","If no reply \u2192 call them","On the call, push to watch + book; if they won't watch, get the call booked anyway"]}},
+                      automation:[],
+                      actions:[]}},
   nb_noaccess:  {label:"Didn't book", sub:"", ctx:"Didn't get access", kind:"out",
                  sop:{goal:"Get them to book a call.",
                       channels:["Email","SMS","WhatsApp"],
-                      automation:["Automated email sent to prospect (booking link)","Automated SMS sent to prospect (booking link)"],
-                      actions:["WhatsApp the prospect to get them to book"]}},
+                      automation:[],
+                      actions:[]}},
   call_booked:  {label:"Call booked", sub:"Awaiting call", kind:"stage",
                  sop:{goal:"Screen the prospect first \u2014 how qualified they are, what angle to take, and whether to take the call at all. Then get them to show up having gone through the pre-call material.",
                       channels:["Phone","Email","SMS","WhatsApp"],
-                      automation:["Booking confirmation email \u2014 on booking","Reminder email \u2014 23 hours before the call","Reminder email \u2014 closer to the call","SMS confirmation","Slack notification to team of new booking"],
-                      actions:["Screen the prospect from their booking-form answers \u2014 qualify, pick the angle, decide keep / reschedule / decline","WhatsApp a personal confirmation ahead of the call","Check they've gone through the pre-call material; nudge if not","Day before the call: WhatsApp reminder with date, time and a nudge to review the pre-call material","1 hour before the call: WhatsApp 'still good for [time]?' \u2014 if no reply within 20 minutes, call them"]}},
+                      automation:[],
+                      actions:[]}},
   no_show:      {label:"No show", sub:"", kind:"out",
                  sop:{goal:"Get them to respond, figure out why they didn't show, and get them booked back in.",
-                      timing:"Automation triggers ~15 minutes after the missed call time",
                       channels:["Phone","Email","SMS","WhatsApp"],
-                      automation:["Automated 'missed you' email sent to prospect (rebooking link)","Automated SMS sent to prospect (rebooking link)","Slack notification to team of the no-show"],
-                      actions:["Call the prospect within 30 minutes to find out what happened \u2014 warm tone, no judgement","If no answer \u2192 WhatsApp them","Once you reach them, get the call rebooked"]}},
+                      automation:[],
+                      actions:[]}},
   call_happens: {label:"Call happens", sub:"Live on Zoom", kind:"stage",
                  sop:{goal:"Get them to make a clear decision on the call — to buy or not.",
                       channels:["Zoom"],
                       automation:[],
-                      actions:["Follow the sales call script"]}},
+                      actions:[]}},
   closed:       {label:"Closed", sub:"", kind:"win",
                  sop:{goal:"Get them onboarded in the best way possible and as fast as possible.", channels:["Email"], automation:[],actions:[]}},
   dc_fu_booked: {label:["Didn't close","follow-up booked"], sub:"", kind:"out",
                  sop:{goal:"Confirm the objection, find a way to overcome it, and prepare for the follow-up call.",
                       channels:["Email","SMS","WhatsApp"],
-                      automation:["Follow-up call confirmation email (date/time + Zoom link)","SMS confirmation","Slack notification to team \u2014 didn't close + follow-up booked"],
-                      actions:["Immediately after the call: log why they didn't close and the exact objection","Work out how to overcome the objection; prepare the angle + material for the follow-up call","Send a resource that pre-handles the objection (case study / proof)","WhatsApp a personal touch before the follow-up to keep them warm and confirm they'll show"]}},
+                      automation:[],
+                      actions:[]}},
   dc_fu_not:    {label:["Didn't close","follow-up NOT booked"], sub:"", kind:"out",
                  sop:{goal:"Find out exactly what the objection was, work out how to overcome it, and get them booked back in for a call.",
                       channels:["Email","SMS","WhatsApp"],
-                      automation:["Automated re-engagement email sent to prospect (rebooking link)","Automated SMS sent to prospect (rebooking link)","Slack notification to team \u2014 didn't close + follow-up NOT booked"],
-                      actions:["Immediately after the call: log why they didn't close and the exact objection","Work out how to overcome the objection; prepare the angle + material","Send a resource that pre-handles the objection (case study / proof)","WhatsApp the prospect to re-open the conversation and get the call rebooked"]}},
+                      automation:[],
+                      actions:[]}},
   onboarding:   {label:"Onboarding", sub:"New client setup", kind:"stage",
                  sop:{goal:"Give them the smoothest process possible to minimise the chance of backing out or asking for a refund.", channels:["Email"], automation:[],actions:[]}}
 };
@@ -342,9 +340,15 @@ function openDrawer(id){
   }
   dInner.innerHTML=h;
 }
+function itemHTML(t){
+  const i=String(t).indexOf('::');
+  if(i<0) return esc(t);
+  const label=t.slice(0,i).trim(), url=t.slice(i+2).trim();
+  return `<a class="ilink" href="${esc(url)}" target="_blank" rel="noopener">${esc(label)} ↗</a>`;
+}
 function listView(items){
   if(!items||!items.length) return `<div class="placeholder">Nothing yet — turn on Edit mode to add items.</div>`;
-  return `<div class="chk">`+items.map(t=>`<div class="chkitem"><span class="box"></span><span>${esc(t)}</span></div>`).join('')+`</div>`;
+  return `<div class="chk">`+items.map(t=>`<div class="chkitem"><span class="box"></span><span>${itemHTML(t)}</span></div>`).join('')+`</div>`;
 }
 function listEdit(id,key,items){
   let h='';
