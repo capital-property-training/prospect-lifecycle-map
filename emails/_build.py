@@ -203,13 +203,33 @@ add("didnt-book-1", "Didn't book", 1, "Ready to map out your first deal?", "48 h
     "Ross Cheung",
 ]))
 
-add("didnt-watch-1", "Got access · didn't watch", 1, "You're in, here's where to start", "24 hours after purchase",
+add("didnt-watch-1", "Got access · didn't watch", 1, "You're in, here's where to start", "9 am UK, at least 24 hours after unlocking the course — skipped if they've started watching",
     "GoHighLevel automation “Got Access — Didn't Watch”, step “Email”", plain([
     "Hi {{contact.first_name}},",
     "You've got full access to The Rent-to-Rent Fast Track.",
     "The welcome video is where it clicks. It walks you through how the model actually works, so you can spot your first deal instead of guessing. Most people get through it in one sitting, and at the end it shows you exactly how to book your call with me.",
     "To start, open the Skool invite email we sent you (check spam) and tap Join Now. That opens your course.",
     "Any trouble getting in, just reply to this email and I'll sort it.",
+    "Ross Cheung",
+]))
+
+add("didnt-watch-2", "Got access · didn't watch", 2, "Your Fast Track is waiting for you", "4 days after Email 1 (about day 5) — skipped if they've started watching",
+    "GoHighLevel automation “Got Access — Didn't Watch”, step “Email 2”", plain([
+    "Hi {{contact.first_name}},",
+    "You bought The Rent-to-Rent Fast Track a few days ago, and it looks like you haven't been able to get started yet.",
+    "I don't want you to miss out on what you paid for. Inside is the exact process for finding your first rent-to-rent deal — the thing that gets you your first income without buying a property. It's all there, ready when you are.",
+    "Here's your link again so you don't have to dig for it: <a href=\"#\">Open the Fast Track</a>",
+    "And if the problem is getting in — invite didn't arrive, landed in spam, wrong email — just reply and I'll sort it for you today. That's what I'm here for.",
+    "Ross Cheung",
+]))
+
+add("didnt-watch-3", "Got access · didn't watch", 3, "Your Fast Track is still waiting for you", "9 days after Email 2 (about day 14) — skipped if they've started watching",
+    "GoHighLevel automation “Got Access — Didn't Watch”, step “Email 3”", plain([
+    "Hi {{contact.first_name}},",
+    "You bought The Rent-to-Rent Fast Track a couple of weeks ago, and it looks like you haven't been able to get started yet.",
+    "I don't want you to miss out on what you paid for. Inside is the exact process for finding your first rent-to-rent deal — the thing that gets you your first income without buying a property. It's all there, ready when you are.",
+    "Here's your link again so you don't have to dig for it: <a href=\"#\">Open the Fast Track</a>",
+    "And if the problem is getting in — invite didn't arrive, landed in spam, wrong email — just reply and I'll sort it for you today. That's what I'm here for.",
     "Ross Cheung",
 ]))
 
