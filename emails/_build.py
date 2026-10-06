@@ -271,6 +271,79 @@ add("dc-not-1", "Didn't close · follow-up NOT booked", 1, "Picking up where we 
     "Ross Cheung",
 ]))
 
+
+# ---------------- SMS (text messages to the prospect) ----------------
+SMS = []
+def sms(slug, step, when, source, text):
+    SMS.append(dict(slug=slug, step=step, when=when, source=source, text=text))
+
+BOOK = "https://api.leadconnectorhq.com/widget/bookings/rent-to-rent-strategy-playbook"
+
+sms("sms-purchased-1", "Purchased course", "Straight after purchase",
+    "GoHighLevel automation “RTR — Course Access Gate Submitted”, step “SMS”",
+    "{{contact.first_name}}, you're in — thanks for grabbing the rent2rent fasttracker. check your email for the skool invite and hit 'join now' to unlock lesson 1.")
+
+sms("sms-didnt-watch-1", "Got access · didn't watch", "9 am UK, at least 24 hours after unlocking the course — straight after Email 1; skipped if they've started watching",
+    "GoHighLevel automation “Got Access — Didn't Watch”, step “SMS”",
+    "{{contact.first_name}}, you're in but haven't started the Fast Track yet. It shows how rent-to-rent works without buying property. To jump into lesson 1, open the Skool invite email we sent you (check spam) and tap Join Now. That opens your course.")
+
+sms("sms-no-access-1", "Didn't get access", "48 hours and 7 days after purchase, if still not in Skool — same moment as the invite re-send",
+    "GoHighLevel automation “Fast Track - Skool Invite Re-sent (48h / 7d)”, step “SMS”",
+    "Hi {{contact.first_name}}, Ross here. I noticed you haven't got into your Rent-to-Rent Fast Track yet, so I've just re-sent your invite email from Skool. Tap \"Join Now\" in that email and you'll go straight into the course.")
+
+sms("sms-didnt-book-1", "Didn't book", "72 hours after purchase, if no call booked (24 hours after Email 1)",
+    "GoHighLevel automation “Didn't Book — Book Nudge”, step “SMS”",
+    "{{contact.first_name}}, glad you got through the course. next step's your free call — i'll build out a business plan for your situation. grab a slot: " + BOOK)
+
+sms("sms-call-booked-1", "Call booked", "Straight after the call is booked",
+    "GoHighLevel automation “Call Booked”, step “SMS”",
+    "{{contact.first_name}}, you're booked in for {{appointment.start_date_time}} — looking forward to it. go through the training first so we can build your plan on the call: open the Skool invite email we sent you (check spam) and tap Join Now. That opens your course.")
+
+sms("sms-no-show-1", "No show", "15 minutes after the booking is marked no-show (Email 1 goes first)",
+    "GoHighLevel automation “No Show — Rebook”, step “SMS”",
+    "{{contact.first_name}}, had you down for a call just now and we missed each other — everything ok? grab a new slot and we'll pick it up: " + BOOK)
+
+sms("sms-dc-booked-1", "Didn't close · follow-up booked", "1 minute after the card is moved to Call Completed-Follow UP",
+    "GoHighLevel automation “Didn't Close — Follow-up Booked”, step “SMS”",
+    "{{contact.first_name}}, follow-up's locked in for {{appointment.start_date_time}} — sent you something to watch before then that covers what we discussed. see you then; your zoom link's in the calendar invite.")
+
+sms("sms-dc-not-1", "Didn't close · follow-up NOT booked", "1 hour after the card is moved to Deal Lost",
+    "GoHighLevel automation “Didn't Close — No Follow-up”, step “SMS”",
+    "{{contact.first_name}}, been thinking about what you raised on the call — reckon i can show you a way through it. grab a quick slot and we'll go through it properly: " + BOOK)
+
+SMS_PAGE = """<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{title}</title>
+<style>
+ body{{margin:0;background:#0f1117;color:#e7e9ee;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}}
+ .bar{{background:#161922;border-bottom:2px solid #191970;padding:12px 18px;display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;font-size:13px}}
+ .bar a{{color:#9fb0ff;text-decoration:none;font-weight:700}}
+ .bar b{{color:#fff}}
+ .meta{{color:#9aa0ad}}
+ .note{{max-width:420px;margin:18px auto 10px;padding:0 12px;font-size:12px;color:#9aa0ad}}
+ .phone{{max-width:420px;margin:0 auto 40px;background:#fff;border-radius:28px;padding:22px 16px 30px;box-shadow:0 0 0 8px #22252f}}
+ .from{{text-align:center;color:#6b7280;font-size:12px;margin:0 0 14px}}
+ .bubble{{background:#e9e9eb;color:#111;border-radius:18px;padding:12px 14px;font-size:16px;line-height:1.4;max-width:88%;white-space:pre-wrap;word-wrap:break-word}}
+ .bubble .mf{{background:#dbe4ff;color:#1E3156;border-radius:4px;padding:0 4px;font-size:14px}}
+ .bubble a{{color:#1d4ed8;pointer-events:none}}
+</style></head><body>
+<div class="bar">
+  <a href="../index.html">← Back to map</a>
+  <span><span class="meta">Step:</span> <b>{step}</b></span>
+  <span><span class="meta">Text message</span></span>
+  <span><span class="meta">Sent:</span> <b>{when}</b></span>
+</div>
+<div class="note">Copied from {source} on {date}. Links are switched off on this copy. Highlighted parts are filled in per person.</div>
+<div class="phone"><div class="from">Text Message · from Capital Property Training</div><div class="bubble">{text}</div></div>
+</body></html>"""
+
+import re
+def render_sms_text(t):
+    t = html.escape(t)
+    t = re.sub(r"\{\{([^}]+)\}\}", r'<span class="mf">\1</span>', t)
+    t = re.sub(r"(https?://\S+)", r'<a href="#">\1</a>', t)
+    return t
+
 # ---------------- page writer ----------------
 PAGE = """<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -306,6 +379,12 @@ def build():
                           source=html.escape(e["source"]), date=today, email=email_html)
         (HERE / f"{e['slug']}.html").write_text(out)
         print("wrote", e["slug"])
+    for m in SMS:
+        out = SMS_PAGE.format(title=f"Text — {m['step']}", step=html.escape(m["step"]),
+                              when=html.escape(m["when"]), source=html.escape(m["source"]),
+                              date=today, text=render_sms_text(m["text"]))
+        (HERE / f"{m['slug']}.html").write_text(out)
+        print("wrote", m["slug"])
 
 if __name__ == "__main__":
     build()
