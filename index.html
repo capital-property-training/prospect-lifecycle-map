@@ -168,7 +168,7 @@ let NODES = {
                       automation:[],
                       actions:[]}},
   closed:       {label:"Closed", sub:"", kind:"win",
-                 sop:{goal:"Get them onboarded in the best way possible and as fast as possible.", channels:["Email"], automation:["Ross taps “Closed” → card moved to Closed - Won, tag “call outcome logged”"],actions:[]}},
+                 sop:{goal:"Get them onboarded in the best way possible and as fast as possible.", channels:["Email"], automation:["Ross taps “Closed” → card moved to Closed - Won, tag “call outcome logged”","Card reaching Closed - Won starts the onboarding automation (see Onboarding)"],actions:["Tap “Closed” in the after-call text (or move the card to Closed - Won by hand) — this starts onboarding"]}},
   dc_fu_booked: {label:["Didn't close","follow-up booked"], sub:"", kind:"out",
                  sop:{goal:"Confirm the objection, find a way to overcome it, and prepare for the follow-up call.",
                       channels:["Email","SMS","WhatsApp"],
@@ -180,7 +180,7 @@ let NODES = {
                       automation:["Ross taps “Lost” → card moved to Deal Lost (status Lost), tag “call outcome logged”","Email 1 — when the card is moved to Deal Lost ::emails/dc-not-1.html","Text 1 — 1 hour after the card is moved ::emails/sms-dc-not-1.html"],
                       actions:[]}},
   onboarding:   {label:"Onboarding", sub:"New client setup", kind:"stage",
-                 sop:{goal:"Give them the smoothest process possible to minimise the chance of backing out or asking for a refund.", channels:["Email"], automation:[],actions:[]}}
+                 sop:{goal:"Give them the smoothest process possible to minimise the chance of backing out or asking for a refund.", channels:["Email","Google Drive","Skool"], automation:["Zapier “cpt-client-onboarding” — runs about 1 minute after the card is moved to Closed - Won (needs an email on the contact)","Client folder made in the CPT shared drive: Clients / [Full Name], with a Marketing Templates sub-folder","6 files copied in, named “[Full Name] — …”: Your 90-Day Plan.pdf, Success Benchmarks, Client Operating Sheet, Market Research, Your Deal Calculator, Discovery Form","4 marketing templates copied into Marketing Templates: Cold follow-up Email Script, Company info, Email about specific properties, Direct-to-vendor HMO register letter","Folder shared with the client’s email (edit access; Google’s own share email switched off)","Skool: The 6 Figure Rent to Rent HMO Course unlocked for their email (invited to the group if not already in)","Email 1 — welcome email, about 1 minute after Closed - Won ::emails/onboarding-1.html"],actions:["Send the coaching agreement by hand — GoHighLevel › Payments › Documents & Contracts › template “CPT One-to-One Coaching Agreement” (edit the payment terms per deal; client signs first, then Ross)","Book the onboarding call by hand — GoHighLevel calendar “Client Onboarding Call” (60 min); add a Zoom link to the invite"]}}
 };
 
 /* ============ fixed geometry (matches approved layout) ============ */

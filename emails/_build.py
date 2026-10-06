@@ -272,6 +272,29 @@ add("dc-not-1", "Didn't close · follow-up NOT booked", 1, "Picking up where we 
 ]))
 
 
+add("onboarding-1", "Onboarding", 1, "Welcome to Capital Property Training, {{contact.first_name}} – your next steps", "About 1 minute after the card is moved to Closed - Won",
+    "Zapier automation “cpt-client-onboarding”, step “Welcome email” (sent from ross@capitalpropertytraining.com as Ross Cheung)", [
+    p("Hi {{contact.first_name}},"),
+    p("Welcome aboard. Great call today, and well done for backing yourself."),
+    p("You'll also get a separate email from me with your coaching agreement. Please read it and sign it — it only takes a minute on your phone."),
+    h("What you've signed up for:"),
+    p("Full one-to-one support from me until your rent-to-rent business is making £10,000 net profit a month."),
+    h("Your folder:"),
+    p('Everything you need is in one place here: <a href="#">[Folder Link]</a>'),
+    p("Inside you'll find your 90-Day Plan, your Success Benchmarks tracker, your Operating Sheet, your market research sheet, your deal calculator and your marketing templates."),
+    h("Your courses:"),
+    p("I've given you access to my courses on Skool. Log in and you'll find them waiting for you. Feel free to start going through them before our first call."),
+    h("How it works:"),
+    p("<b>1. Onboarding call</b><br/>I'll send you a calendar invite with a Zoom link. On the call I'll walk you through the programme and ask you about your goals, money to invest, area and time."),
+    p("<b>2. Your plan</b><br/>We'll go through your 90-Day Plan and Success Benchmarks together, so you know exactly what to do from day one."),
+    p("<b>3. From there</b><br/>You work through your benchmarks, and we get on a call at the key ones to plan what's next."),
+    h("Before our first call, please:"),
+    p("- Sign your coaching agreement (in the separate email).<br/>- Have a think about how much you can invest and which area you'd like to work in."),
+    p("If you need me, WhatsApp me on 07940 224276."),
+    p("Speak soon.", 8),
+    p("Ross<br/>Capital Property Training", 0),
+])
+
 # ---------------- SMS (text messages to the prospect) ----------------
 SMS = []
 def sms(slug, step, when, source, text):
