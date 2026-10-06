@@ -193,7 +193,7 @@ add("purchased-1", "Purchased course", 1, "The Rent-to-Rent Fast Track Access �
     p("<b>Ross</b>", 0),
 ])
 
-add("didnt-book-1", "Didn't book", 1, "Your free call is still open", "48 hours after purchase, if no call booked",
+add("didnt-book-1", "Didn't book", 1, "Your free call is still open", "36 hours after purchase, if no call booked",
     "GoHighLevel automation “Didn't Book — Book Nudge”, step “Email”", plain([
     "Hi {{contact.first_name}},",
     "You've got the Fast Track. The call is where it gets built around you.",
@@ -306,7 +306,7 @@ BOOK = "https://api.leadconnectorhq.com/widget/bookings/rent-to-rent-strategy-pl
 
 sms("sms-purchased-1", "Purchased course", "Straight after purchase",
     "GoHighLevel automation “RTR — Course Access Gate Submitted”, step “SMS”",
-    "{{contact.first_name}}, you're in — thanks for grabbing the rent2rent fasttracker. check your email for the skool invite and hit 'join now' to unlock lesson 1.")
+    "Hi {{contact.first_name}}, you're in the Rent-to-Rent Fast Track. Check your email for the Skool invite and tap Join Now to unlock it. You also get a free call with me where we look at where you are now and build a plan for your first deal. Grab a time here: capitalpropertytraining.com/confirmation-page-4243 Ross")
 
 sms("sms-didnt-watch-1", "Got access · didn't watch", "9 am UK, at least 24 hours after unlocking the course — straight after Email 1; skipped if they've started watching",
     "GoHighLevel automation “Got Access — Didn't Watch”, step “SMS”",
@@ -316,9 +316,9 @@ sms("sms-no-access-1", "Didn't get access", "48 hours and 7 days after purchase,
     "GoHighLevel automation “Fast Track - Skool Invite Re-sent (48h / 7d)”, step “SMS”",
     "Hi {{contact.first_name}}, Ross here. I noticed you haven't got into your Rent-to-Rent Fast Track yet, so I've just re-sent your invite email from Skool. Tap \"Join Now\" in that email and you'll go straight into the course.")
 
-sms("sms-didnt-book-1", "Didn't book", "72 hours after purchase, if no call booked (24 hours after Email 1)",
-    "GoHighLevel automation “Didn't Book — Book Nudge”, step “SMS”",
-    "{{contact.first_name}}, glad you got through the course. next step's your free call — i'll build out a business plan for your situation. grab a slot: " + BOOK)
+sms("sms-didnt-book-1", "Didn't book", "60 hours after purchase, only if still in RTR Purchased (12 hours before the 72-hour deadline)",
+    "GoHighLevel automation “Didn't Book — Book Nudge”, step “Text 3 — 12 hours left (60h)”",
+    "Hi {{contact.first_name}}, 12 hours left to book your free call. It's where we look at where you are now and build a plan for your first rent-to-rent deal. Grab a time here: capitalpropertytraining.com/confirmation-page-4243 Ross")
 
 sms("sms-call-booked-1", "Call booked", "Straight after the call is booked",
     "GoHighLevel automation “Call Booked”, step “SMS”",
