@@ -367,6 +367,10 @@ WA_PAGE = """<!doctype html>
 </div>
 </body></html>"""
 
+sms("sms-ross-purchase-alert", "Purchased course", "Straight after purchase — to Ross, not the prospect (then the phone rings up to 6 times, 30 seconds apart: “New sale. [name]. Check your texts.”)",
+    "Make automation “Purchase Alert - Call Ross”, step “Send SMS” (from the Twilio number)",
+    "NEW CPT SALE\nName: {{full_name}}\nPhone: {{phone}}\nPaid: £{{amount}} - {{product}}\nWhatsApp: https://wa.me/{{phone digits}}")
+
 SMS_PAGE = """<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
