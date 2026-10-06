@@ -193,14 +193,16 @@ add("purchased-1", "Purchased course", 1, "The Rent-to-Rent Fast Track Access �
     p("<b>Ross</b>", 0),
 ])
 
-add("didnt-book-1", "Didn't book", 1, "Ready to map out your first deal?", "48 hours after purchase, if no call booked",
+add("didnt-book-1", "Didn't book", 1, "Your free call is still open", "48 hours after purchase, if no call booked",
     "GoHighLevel automation “Didn't Book — Book Nudge”, step “Email”", plain([
     "Hi {{contact.first_name}},",
-    "You've got everything you need inside The Rent-to-Rent Fast Track to land your first deal. The fastest way to turn it into action is to jump on a call with me.",
-    "On the call we'll look at where you're at and map out the exact next steps for your first deal.",
-    'Grab a time here:<br/><a href="#">https://capitalpropertytraining.com/confirmation-page-4243</a>',
+    "You've got the Fast Track. The call is where it gets built around you.",
+    "On the call we look at where you are now, where you want to be, and put a plan together for your first deal.",
+    "It's free. It came with your purchase.",
+    "Pick a time in the next three days — that's as far ahead as my calendar opens.",
+    '<a href="#"><b>Book my free call</b></a>',
     "Talk soon,",
-    "Ross Cheung",
+    "Ross",
 ]))
 
 add("didnt-watch-1", "Got access · didn't watch", 1, "You're in, here's where to start", "9 am UK, at least 24 hours after unlocking the course — skipped if they've started watching",
