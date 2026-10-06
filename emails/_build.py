@@ -360,12 +360,11 @@ WA_PAGE = """<!doctype html>
   <span><span class="meta">WhatsApp — sent by Ross by hand</span></span>
   <span><span class="meta">Sent:</span> <b>Within a minute of purchase, after the purchase alert</b></span>
 </div>
-<div class="note">Copied from a real WhatsApp thread on {date}. Ross sends this himself from his phone; it is not automated.</div>
+<div class="note">Approved wording as of {date}. Ross sends this himself from his phone; it is not automated.</div>
 <div class="phone"><div class="from">WhatsApp · from Ross</div>
-<div class="b">Hi [first name]<span class="t">00:28</span></div>
 <div class="vid"><div class="box">▶ Welcome video (recorded for them)</div><span class="t">00:28</span></div>
-<div class="b">Really excited to have you here. I recorded this personally for you - check it out<span class="t">00:28</span></div>
-<div class="b">Your onboarding call is included in your purchase - but you only have 72 hours to book it. Want me to lock in a time for you?<span class="t">00:28</span></div>
+<div class="b">Hi [first name]. Great to have you in. I made this video just for you. Have a look.<span class="t">00:28</span></div>
+<div class="b">Your free call comes with the course. You have 72 hours to book it. Want me to lock in a time for you?<span class="t">00:28</span></div>
 </div>
 </body></html>"""
 
@@ -444,6 +443,57 @@ WA_AUTO_PAGE = """<!doctype html>
 <div class="phone"><div class="from">WhatsApp · from Ross Cheung</div>
 <div class="b">{text}<span class="t">12:30</span></div>
 </div>
+</body></html>"""
+
+# ---------------- message bank (what Ross sends by hand, phone-friendly) ----------------
+BANK = [
+  ("Welcome — part 1 (send with the video)", "WhatsApp · straight after purchase, right after the purchase alert",
+   "Hi [first name]. Great to have you in. I made this video just for you. Have a look."),
+  ("Welcome — part 2", "WhatsApp · straight after part 1",
+   "Your free call comes with the course. You have 72 hours to book it. Want me to lock in a time for you?"),
+  ("Booking link", "WhatsApp · when they say yes to a call but want to pick the time themselves",
+   "Here is the link to grab a time: https://capitalpropertytraining.com/confirmation-page-4243"),
+  ("Two times", "WhatsApp · when they reply YES or ask for a time",
+   "Great. I can do [Day, time] or [Day, time]. Which works for you?"),
+  ("Day 2 — what area", "WhatsApp · 12:30 UK the day after the first call, if still not booked (will be automatic once the sender name is approved)",
+   "Hi [first name]. What area are you looking at for your first deal? Send me the town and I'll pull some rent numbers together for you before we speak on your free call."),
+  ("Day 3 — last one", "WhatsApp · 12:30 UK the day after that, if still not booked (will be automatic once the sender name is approved)",
+   "Hi [first name], it's Ross. Last one from me. I'm starting to feel like that mate who keeps asking you to come to the gym. Your free call is still there if you want it. Just reply YES and I'll send you two times."),
+  ("Got your numbers (after they send a town)", "Phone call, not a message — ring them",
+   "Got your numbers for [town]. I can do [Day, time] or [Day, time]. Which is better for you?"),
+]
+
+BANK_PAGE = """<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Message bank</title>
+<style>
+ body{{margin:0;background:#0f1117;color:#e7e9ee;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}}
+ .bar{{background:#161922;border-bottom:2px solid #191970;padding:12px 16px;display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;font-size:13px}}
+ .bar a{{color:#9fb0ff;text-decoration:none;font-weight:700}}
+ .wrap{{max-width:560px;margin:0 auto;padding:16px 16px 60px}}
+ .name{{display:flex;gap:10px;align-items:center;margin:0 0 18px;font-size:14px;color:#cfd3dc}}
+ .name input{{flex:1;font-size:16px;padding:10px 12px;border-radius:10px;border:1px solid #2a2f3d;background:#1b1f2a;color:#fff}}
+ .card{{background:#1b1f2a;border-radius:14px;padding:14px 14px 12px;margin:0 0 14px}}
+ .card h2{{font-size:15px;margin:0 0 4px}}
+ .card .when{{font-size:12px;color:#9aa0ad;margin:0 0 10px}}
+ .card .msg{{font-size:17px;line-height:1.45;background:#dcf8c6;color:#111;border-radius:12px;padding:10px 12px;white-space:pre-wrap}}
+ .card .msg .fill{{background:#fff3b0;border-radius:4px;padding:0 4px}}
+ .card button{{margin-top:10px;width:100%;font-size:16px;padding:12px;border-radius:10px;border:0;background:#1E3156;color:#fff;font-weight:700}}
+ .card button.done{{background:#2f8f4e}}
+ .note{{font-size:12px;color:#9aa0ad;margin:0 0 16px}}
+</style></head><body>
+<div class="bar"><a href="index.html">← Back to map</a><span>Message bank — what Ross sends by hand</span></div>
+<div class="wrap">
+<div class="note">Type the person's first name once and every message fills it in. Tap Copy, then paste into WhatsApp. Updated {date}.</div>
+<div class="name"><label for="fn">First name</label><input id="fn" placeholder="e.g. Sarah" autocomplete="off"></div>
+{cards}
+</div>
+<script>
+const fn=document.getElementById('fn');
+function render(){{const n=fn.value.trim();document.querySelectorAll('.msg').forEach(m=>{{const t=m.dataset.text;m.innerHTML=t.replace(/\\[first name\\]/g,n?n:'<span class="fill">[first name]</span>').replace(/\\[(Day, time|town)\\]/g,'<span class="fill">[$1]</span>');}});}}
+fn.addEventListener('input',render);render();
+document.querySelectorAll('button[data-i]').forEach(b=>b.addEventListener('click',async()=>{{const m=b.previousElementSibling;const n=fn.value.trim();const txt=m.dataset.text.replace(/\\[first name\\]/g,n||'[first name]');try{{await navigator.clipboard.writeText(txt);}}catch(e){{const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();}}b.textContent='Copied';b.classList.add('done');setTimeout(()=>{{b.textContent='Copy';b.classList.remove('done');}},1500);}}));
+</script>
 </body></html>"""
 
 # ---------------- call script (Ross, by phone) ----------------
@@ -545,6 +595,12 @@ def build():
     print("wrote whatsapp-purchased")
     (HERE / "script-didnt-book.html").write_text(SCRIPT_PAGE.format(date=today))
     print("wrote script-didnt-book")
+    cards = "\n".join(
+        f'<div class="card"><h2>{html.escape(t)}</h2><div class="when">{html.escape(w)}</div>'
+        f'<div class="msg" data-text="{html.escape(x, quote=True)}"></div><button data-i="{i}">Copy</button></div>'
+        for i,(t,w,x) in enumerate(BANK))
+    (HERE.parent / "messages.html").write_text(BANK_PAGE.format(date=today, cards=cards))
+    print("wrote messages")
     for m in WA_AUTO:
         out = WA_AUTO_PAGE.format(title=f"WhatsApp — {m['step']}", step=html.escape(m["step"]),
                                   when=html.escape(m["when"]), template=html.escape(m["template"]),
