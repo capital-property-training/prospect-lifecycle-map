@@ -404,6 +404,46 @@ def render_sms_text(t):
     t = re.sub(r"(https?://\S+)", r'<a href="#">\1</a>', t)
     return t
 
+# ---------------- WhatsApp (automated, from the GoHighLevel line) ----------------
+WA_AUTO = []
+def wa(slug, step, when, template, text):
+    WA_AUTO.append(dict(slug=slug, step=step, when=when, template=template, text=text))
+
+wa("whatsapp-didnt-book-2", "Didn’t book", "12:30 pm UK the day after the first call, only if still not booked (GoHighLevel automation “Call List — not booked (3 tries)”)",
+   "didnt_book_day2",
+   "Hi {{first name}}. What area are you looking at for your first deal? Send me the town and I'll pull some rent numbers together for you before we speak on your free call.")
+wa("whatsapp-didnt-book-3", "Didn’t book", "12:30 pm UK the day after that, only if still not booked — last one, then the card goes to Deal Lost",
+   "didnt_book_day3",
+   "Hi {{first name}}, it's Ross. Last one from me. I'm starting to feel like that mate who keeps asking you to come to the gym. Your free call is still there if you want it. Just reply YES and I'll send you two times.")
+
+WA_AUTO_PAGE = """<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{title}</title>
+<style>
+ body{{margin:0;background:#0f1117;color:#e7e9ee;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}}
+ .bar{{background:#161922;border-bottom:2px solid #191970;padding:12px 18px;display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;font-size:13px}}
+ .bar a{{color:#9fb0ff;text-decoration:none;font-weight:700}}
+ .bar b{{color:#fff}}
+ .meta{{color:#9aa0ad}}
+ .note{{max-width:420px;margin:18px auto 10px;padding:0 12px;font-size:12px;color:#9aa0ad}}
+ .phone{{max-width:420px;margin:0 auto 40px;background:#efe7dd;border-radius:28px;padding:22px 14px 30px;box-shadow:0 0 0 8px #22252f}}
+ .from{{text-align:center;color:#6b7280;font-size:12px;margin:0 0 14px}}
+ .b{{background:#dcf8c6;color:#111;border-radius:12px;padding:9px 12px;font-size:15.5px;line-height:1.4;max-width:86%;margin:0 0 8px auto;box-shadow:0 1px 0 rgba(0,0,0,.08);white-space:pre-wrap}}
+ .b .mf{{background:#dbe4ff;color:#1E3156;border-radius:4px;padding:0 4px;font-size:14px}}
+ .t{{display:block;text-align:right;font-size:11px;color:#667;margin-top:4px}}
+</style></head><body>
+<div class="bar">
+  <a href="../index.html">← Back to map</a>
+  <span><span class="meta">Step:</span> <b>{step}</b></span>
+  <span><span class="meta">WhatsApp — sent automatically from the Capital Property Training line (07414 215073)</span></span>
+  <span><span class="meta">Sent:</span> <b>{when}</b></span>
+</div>
+<div class="note">Meta-approved template “{template}”, copied on {date}. Highlighted parts are filled in per person. If they reply, the chase stops and Ross answers from the GoHighLevel inbox.</div>
+<div class="phone"><div class="from">WhatsApp · from Ross Cheung</div>
+<div class="b">{text}<span class="t">12:30</span></div>
+</div>
+</body></html>"""
+
 # ---------------- call script (Ross, by phone) ----------------
 SCRIPT_PAGE = """<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -503,6 +543,12 @@ def build():
     print("wrote whatsapp-purchased")
     (HERE / "script-didnt-book.html").write_text(SCRIPT_PAGE.format(date=today))
     print("wrote script-didnt-book")
+    for m in WA_AUTO:
+        out = WA_AUTO_PAGE.format(title=f"WhatsApp — {m['step']}", step=html.escape(m["step"]),
+                                  when=html.escape(m["when"]), template=html.escape(m["template"]),
+                                  date=today, text=render_sms_text(m["text"]))
+        (HERE / f"{m['slug']}.html").write_text(out)
+        print("wrote", m["slug"])
 
 if __name__ == "__main__":
     build()
