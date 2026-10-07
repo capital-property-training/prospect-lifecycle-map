@@ -297,6 +297,14 @@ add("onboarding-1", "Onboarding", 1, "Welcome to Capital Property Training, {{co
     p("Ross<br/>Capital Property Training", 0),
 ])
 
+add("didnt-book-wrong-number", "Didn't book", 2, "Have I got the right number for you?", "Straight after Ross taps “Wrong number?” in a call reminder text",
+    "GoHighLevel automation “Buyer Wrong Number - Ask by Email”, step “Email - ask for right number”", plain([
+    "Hi {{contact.first_name}},",
+    "It's Ross from Capital Property Training. I tried to call you about your free call, but I think I've got the wrong number for you.",
+    "What's the best number to reach you on? Just reply to this email with it.",
+    "Ross",
+]))
+
 # ---------------- SMS (text messages to the prospect) ----------------
 SMS = []
 def sms(slug, step, when, source, text):
@@ -315,6 +323,10 @@ sms("sms-didnt-watch-1", "Got access · didn't watch", "9 am UK, at least 24 hou
 sms("sms-no-access-1", "Didn't get access", "48 hours and 7 days after purchase, if still not in Skool — same moment as the invite re-send",
     "GoHighLevel automation “Fast Track - Skool Invite Re-sent (48h / 7d)”, step “SMS”",
     "Hi {{contact.first_name}}, Ross here. I noticed you haven't got into your Rent-to-Rent Fast Track yet, so I've just re-sent your invite email from Skool. Tap \"Join Now\" in that email and you'll go straight into the course.")
+
+sms("sms-no-access-bounce", "Didn't get access", "Straight after their email bounces (buyers only)",
+    "GoHighLevel automation “Buyer Email Bounced - Ask for Right Email”, step “SMS”",
+    "Hi {{contact.first_name}}, it's Ross from Capital Property Training. My email to you bounced, so you may not have your Rent-to-Rent Fast Track access yet. What's the best email for you? Reply here and I'll sort it.")
 
 sms("sms-didnt-book-1", "Didn't book", "60 hours after purchase, only if still in RTR Purchased (12 hours before the 72-hour deadline)",
     "GoHighLevel automation “Didn't Book — Book Nudge”, step “Text 3 — 12 hours left (60h)”",
