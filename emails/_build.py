@@ -540,9 +540,27 @@ SCRIPT_PAGE = """<!doctype html>
 
 <div class="say">Hi, is <span class="fill">[Name]</span> there? Oh hey <span class="fill">[Name]</span>, it’s just Ross Cheung from Capital Property Training.</div>
 
-<div class="say">You’d recently purchased the Rent-to-Rent Fast Track course. I think you saw something on Instagram or Facebook about starting a rent-to-rent business alongside your 9-to-5, so you can get your time back and make more money, right? <span class="cue">(wait)</span></div>
+<div class="say">You’d recently purchased the Rent-to-Rent Fast Track course. I think you saw something on Instagram or Facebook about starting a rent-to-rent business alongside your 9-to-5, so you can get your time back and make more money. Is that right? <span class="cue">(wait)</span></div>
 
-<div class="say">I was curious — when you purchased the course, what was it about it that attracted your attention?</div>
+<div class="say">Do you already have a rent-to-rent business, or are you looking to get your first deal?</div>
+
+<div class="say">Okay… and what do you feel is the main thing stopping you from getting that first deal done?</div>
+
+<div class="say">Okay. So the free one-to-one is pretty basic. It’s really just for me to see where you’re at now, compared to where you want to be, and what that gap looks like. Then I’ll map out a plan to get your first deal set up so it’s profitable and legal. Would that be helpful? <span class="cue">(wait)</span></div>
+
+<div class="say">Would you be against grabbing a time for that while I’ve got you?</div>
+
+<div class="say">What suits you better — a weekday or the weekend?</div>
+
+<div class="say">I’ve got <span class="fill">[Day, time]</span> or <span class="fill">[Day, time]</span> — which one’s better?</div>
+
+<div class="say"><span class="cue">(If they sound unsure)</span> You sounded a little unsure there — what’s going on?</div>
+
+<div class="say"><span class="cue">(If they say they’ll book later)</span> Totally get it. Most people mean to, then life gets busy. Would you be opposed to picking a time now? If it doesn’t suit, you can move it.</div>
+
+<div class="do">Book it while they’re on the line. Confirm number and email.</div>
+
+<div class="say">Zoom link’s on its way by text and email.</div>
 
 <h3>Version 2</h3>
 
@@ -554,11 +572,19 @@ SCRIPT_PAGE = """<!doctype html>
 
 <div class="say"><span class="cue">(They say “still looking”)</span> Okay. And do you know exactly what you need to do to get your first deal set up so it’s profitable and legal?</div>
 
-<h3>Then (both versions)</h3>
+<div class="say">Okay… and what do you feel is the main thing stopping you from getting that first deal done?</div>
 
-<div class="say">Okay. If I was to spare some time for a call to create a plan with you, would that be helpful? <span class="cue">(wait)</span></div>
+<div class="say">Okay. So the free one-to-one is pretty basic. It’s really just for me to see where you’re at now, compared to where you want to be, and what that gap looks like. Then I’ll map out a plan to get your first deal set up so it’s profitable and legal. Would that be helpful? <span class="cue">(wait)</span></div>
 
-<div class="say">I’ve got my calendar open — <span class="fill">[Day, time]</span> or <span class="fill">[Day, time]</span>?</div>
+<div class="say">Would you be against grabbing a time for that while I’ve got you?</div>
+
+<div class="say">What suits you better — a weekday or the weekend?</div>
+
+<div class="say">I’ve got <span class="fill">[Day, time]</span> or <span class="fill">[Day, time]</span> — which one’s better?</div>
+
+<div class="say"><span class="cue">(If they sound unsure)</span> You sounded a little unsure there — what’s going on?</div>
+
+<div class="say"><span class="cue">(If they say they’ll book later)</span> Totally get it. Most people mean to, then life gets busy. Would you be opposed to picking a time now? If it doesn’t suit, you can move it.</div>
 
 <div class="do">Book it while they’re on the line. Confirm number and email.</div>
 
