@@ -19,7 +19,7 @@
 </style></head><body>
 <div class="bar"><a href="index.html">← Back to map</a><span>Message bank — what Ross sends by hand</span></div>
 <div class="wrap">
-<div class="note">Type the person's first name once and every message fills it in. Tap Copy, then paste into WhatsApp. Updated 6 Oct 2026.</div>
+<div class="note">Type the person's first name once and every message fills it in. Tap Copy, then paste into WhatsApp. Updated 25 Nov 2026.</div>
 <div class="name"><label for="fn">First name</label><input id="fn" placeholder="e.g. Sarah" autocomplete="off"></div>
 <div class="card"><h2>Welcome — part 1 (send with the video)</h2><div class="when">WhatsApp · straight after purchase, right after the purchase alert</div><div class="msg" data-text="Hi [first name]. Great to have you in. I made this video just for you. Have a look."></div><button data-i="0">Copy</button></div>
 <div class="card"><h2>Welcome — part 2</h2><div class="when">WhatsApp · straight after part 1</div><div class="msg" data-text="Your free call comes with the course. You have 72 hours to book it. Want me to lock in a time for you?"></div><button data-i="1">Copy</button></div>
@@ -27,11 +27,14 @@
 <div class="card"><h2>Two times</h2><div class="when">WhatsApp · when they reply YES or ask for a time</div><div class="msg" data-text="Great. I can do [Day, time] or [Day, time]. Which works for you?"></div><button data-i="3">Copy</button></div>
 <div class="card"><h2>Day 2 — what area</h2><div class="when">WhatsApp · 12:30 UK the day after the first call, if still not booked (will be automatic once the sender name is approved)</div><div class="msg" data-text="Hi [first name]. What area are you looking at for your first deal? Send me the town and I&#x27;ll pull some rent numbers together for you before we speak on your free call."></div><button data-i="4">Copy</button></div>
 <div class="card"><h2>Day 3 — last one</h2><div class="when">WhatsApp · 12:30 UK the day after that, if still not booked (will be automatic once the sender name is approved)</div><div class="msg" data-text="Hi [first name], it&#x27;s Ross. Last one from me. I&#x27;m starting to feel like that mate who keeps asking you to come to the gym. Your free call is still there if you want it. Just reply YES and I&#x27;ll send you two times."></div><button data-i="5">Copy</button></div>
+<div class="card"><h2>Call day — confirm</h2><div class="when">WhatsApp (personal) · 8am UK on the day of the call</div><div class="msg" data-text="Hey [first name], just confirming our call today at [time]. It&#x27;s on Zoom, the link is in your email. Best to join on a computer rather than your phone as I may share my screen so you can see things properly. See you later"></div><button data-i="7">Copy</button></div>
+<div class="card"><h2>Call day — 1 hour</h2><div class="when">WhatsApp (personal) · 1 hour before the call</div><div class="msg" data-text="Hey [first name], joining in 1 hour"></div><button data-i="8">Copy</button></div>
+<div class="card"><h2>Call day — 15 mins</h2><div class="when">WhatsApp (personal) · 15 minutes before the call</div><div class="msg" data-text="Joining in 15 mins, the Zoom link is in your email"></div><button data-i="9">Copy</button></div>
 <div class="card"><h2>Got your numbers (after they send a town)</h2><div class="when">Phone call, not a message — ring them</div><div class="msg" data-text="Got your numbers for [town]. I can do [Day, time] or [Day, time]. Which is better for you?"></div><button data-i="6">Copy</button></div>
 </div>
 <script>
 const fn=document.getElementById('fn');
-function render(){const n=fn.value.trim();document.querySelectorAll('.msg').forEach(m=>{const t=m.dataset.text;m.innerHTML=t.replace(/\[first name\]/g,n?n:'<span class="fill">[first name]</span>').replace(/\[(Day, time|town)\]/g,'<span class="fill">[$1]</span>');});}
+function render(){const n=fn.value.trim();document.querySelectorAll('.msg').forEach(m=>{const t=m.dataset.text;m.innerHTML=t.replace(/\[first name\]/g,n?n:'<span class="fill">[first name]</span>').replace(/\[(Day, time|town|time)\]/g,'<span class="fill">[$1]</span>');});}
 fn.addEventListener('input',render);render();
 document.querySelectorAll('button[data-i]').forEach(b=>b.addEventListener('click',async()=>{const m=b.previousElementSibling;const n=fn.value.trim();const txt=m.dataset.text.replace(/\[first name\]/g,n||'[first name]');try{await navigator.clipboard.writeText(txt);}catch(e){const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();}b.textContent='Copied';b.classList.add('done');setTimeout(()=>{b.textContent='Copy';b.classList.remove('done');},1500);}));
 </script>
